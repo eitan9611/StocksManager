@@ -16,14 +16,16 @@ namespace Backend
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            
-            // Add services to the container.
+
+            // Add Database Context FIRST
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Then register services
+            builder.Services.AddScoped<StockService>();
             builder.Services.AddSingleton<WeatherService>();
             builder.Services.AddSingleton<UserService>();
 
-            // Add Database Context
-            builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 

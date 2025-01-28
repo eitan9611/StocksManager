@@ -1,5 +1,6 @@
-
 using Backend.Services;
+using Backend.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend
 {
@@ -15,10 +16,14 @@ namespace Backend
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            
             // Add services to the container.
-            builder.Services.AddSingleton<WeatherService>(); //
-            builder.Services.AddSingleton<UserService>(); //
+            builder.Services.AddSingleton<WeatherService>();
+            builder.Services.AddSingleton<UserService>();
 
+            // Add Database Context
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
@@ -28,16 +33,10 @@ namespace Backend
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            
-
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }

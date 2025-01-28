@@ -16,7 +16,9 @@ namespace Backend
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             // Add services to the container.
-            builder.Services.AddSingleton<WeatherService>(); // הוספת ה-Service
+            builder.Services.AddSingleton<WeatherService>(); //
+            builder.Services.AddSingleton<UserService>(); //
+
 
             var app = builder.Build();
 

@@ -23,7 +23,6 @@ namespace Backend
 
             // Then register services
             builder.Services.AddScoped<StockService>();
-            builder.Services.AddSingleton<WeatherService>();
             builder.Services.AddSingleton<UserService>();
 
 

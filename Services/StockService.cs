@@ -25,6 +25,7 @@ namespace Backend.Services
 
         public async Task<Stock> AddStock(Stock stock)
         {
+            stock.Id = 0; // Ensure that ID is not explicitly set
             _context.Stocks.Add(stock);
             await _context.SaveChangesAsync();
             return stock;

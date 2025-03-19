@@ -389,3 +389,4 @@ C:\Users\User\Desktop\OS\Backend\bin\Debug\net8.0\runtimes\browser\lib\net8.0\Sy
 C:\Users\User\Desktop\OS\Backend\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\User\Desktop\OS\Backend\obj\Debug\net8.0\Backend.sourcelink.json
 C:\Users\User\OneDrive\שולחן העבודה\WS\StocksManager\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\User\Desktop\OS\Backend\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

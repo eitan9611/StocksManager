@@ -1,10 +1,20 @@
 ﻿namespace Backend.Models
 {
+    public class UserStock
+    {
+        public string UserEmail { get; set; }
+        public string Symbol { get; set; } = string.Empty;
+        public int Quantity { get; set; }
+        public decimal BuyPrice { get; set; }
+    }
     public class User
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; } // במקרה רגיל, שמור את זה כהאש!
+        public string Username { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public decimal Balance { get; set; } = 10000; // יתרה ראשונית ברירת מחדל
+
+        //this won't be in table vvvv
+
+        public List<UserStock> Portfolio { get; set; } = new List<UserStock>();
     }
 }

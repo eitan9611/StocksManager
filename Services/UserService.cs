@@ -1,49 +1,41 @@
-﻿using Backend.Models;
+﻿using Backend.Data;
+using Backend.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Services
+
+public class UserService
 {
-    public class UserService
+    private readonly AppDbContext _context;
+
+    public UserService(AppDbContext context)
     {
-        private readonly List<User> _users = new List<User>();
+        _context = context;
+    }
 
-        // CREATE - הוספת משתמש חדש
-        public void AddUser(User user)
-        {
-            user.Id = _users.Count > 0 ? _users.Max(u => u.Id) + 1 : 1;
-            _users.Add(user);
-        }
+    public async Task<User?> GetUserByIdAsync(string userEmail)
+    {
+        return await _context.Users.Include(u => u.Portfolio).FirstOrDefaultAsync(u => u.Email == userEmail);
+    }
 
-        // READ - שליפת משתמש לפי ID
-        public User? GetUserById(int id)
-        {
-            return _users.FirstOrDefault(u => u.Id == id);
-        }
+    public async Task<bool> UpdateBalanceAsync(string userEmail, decimal amount)
+    {
+        var user = await _context.Users.FindAsync(userEmail);
+        if (user == null) return false;
 
-        // READ - שליפת כל המשתמשים
-        public List<User> GetAllUsers()
-        {
-            return _users;
-        }
+        user.Balance += amount;
+        await _context.SaveChangesAsync();
+        return true;
+    }
 
-        // UPDATE - עדכון נתוני משתמש
-        public bool UpdateUser(int id, User updatedUser)
-        {
-            var user = _users.FirstOrDefault(u => u.Id == id);
-            if (user == null) return false;
+    public async Task<bool> AddUserAsync(User user)
+    {
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 
-            user.Name = updatedUser.Name;
-            user.Email = updatedUser.Email;
-            return true;
-        }
-
-        // DELETE - מחיקת משתמש לפי ID
-        public bool DeleteUser(int id)
-        {
-            var user = _users.FirstOrDefault(u => u.Id == id);
-            if (user == null) return false;
-
-            _users.Remove(user);
-            return true;
-        }
+    public async Task<List<User>> GetAllUsersAsync()
+    {
+        return await _context.Users.ToListAsync();
     }
 }

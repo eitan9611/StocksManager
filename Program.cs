@@ -24,6 +24,7 @@ namespace Backend
             // Then register services
             builder.Services.AddScoped<StockService>();
             builder.Services.AddSingleton<UserService>();
+            builder.Services.AddSingleton<TradeService>();
 
 
             var app = builder.Build();

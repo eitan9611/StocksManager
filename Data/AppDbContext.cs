@@ -8,5 +8,18 @@ namespace Backend.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Stock> Stocks { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserStock> UserStocks { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // קשר בין משתמש למניות שהוא מחזיק
+            modelBuilder.Entity<UserStock>()
+                .HasOne<User>()
+                .WithMany(u => u.Portfolio)
+                .HasForeignKey(us => us.UserEmail);
+        }
     }
 }

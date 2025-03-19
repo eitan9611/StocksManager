@@ -1,60 +1,35 @@
 ﻿using Backend.Models;
-using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class UserController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    private readonly UserService _userService;
+
+    public UserController(UserService userService)
     {
-        private readonly UserService _userService;
+        _userService = userService;
+    }
 
-        public UserController(UserService userService)
-        {
-            _userService = userService;
-        }
+    [HttpGet("{email}")]
+    public async Task<IActionResult> GetUser(string email)
+    {
+        var user = await _userService.GetUserByIdAsync(email);
+        return user != null ? Ok(user) : NotFound("User not found.");
+    }
 
-        // CREATE - הוספת משתמש חדש
-        [HttpPost]
-        public IActionResult AddUser([FromBody] User user)
-        {
-            _userService.AddUser(user);
-            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
-        }
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateUser([FromBody] User user)
+    {
+        var success = await _userService.AddUserAsync(user);
+        return success ? Ok("User created.") : BadRequest("Failed to create user.");
+    }
 
-        // READ - שליפת כל המשתמשים
-        [HttpGet]
-        public IActionResult GetAllUsers()
-        {
-            return Ok(_userService.GetAllUsers());
-        }
-
-        // READ - שליפת משתמש לפי ID
-        [HttpGet("{id}")]
-        public IActionResult GetUserById(int id)
-        {
-            var user = _userService.GetUserById(id);
-            if (user == null) return NotFound();
-            return Ok(user);
-        }
-
-        // UPDATE - עדכון משתמש לפי ID
-        [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] User updatedUser)
-        {
-            var success = _userService.UpdateUser(id, updatedUser);
-            if (!success) return NotFound();
-            return NoContent();
-        }
-
-        // DELETE - מחיקת משתמש לפי ID
-        [HttpDelete("{id}")]
-        public IActionResult DeleteUser(int id)
-        {
-            var success = _userService.DeleteUser(id);
-            if (!success) return NotFound();
-            return NoContent();
-        }
+    [HttpPut("balance/{userEmail}")]
+    public async Task<IActionResult> UpdateBalance(string userEmail, [FromBody] decimal amount)
+    {
+        var success = await _userService.UpdateBalanceAsync(userEmail, amount);
+        return success ? Ok("Balance updated.") : BadRequest("Failed to update balance.");
     }
 }

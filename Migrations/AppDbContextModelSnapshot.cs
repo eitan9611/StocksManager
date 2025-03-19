@@ -48,6 +48,8 @@ namespace Backend.Migrations
 
                     b.ToTable("Stocks");
                 });
+
+
 #pragma warning restore 612, 618
         }
     }

@@ -27,9 +27,14 @@ public class UserService
         return true;
     }
 
-    public async Task<bool> AddUserAsync(User user)
+    public async Task<bool> AddUserAsync(string userEmail)
     {
-        _context.Users.Add(user);
+        var user = await _context.Users.FindAsync(userEmail);
+        if (user != null) return false;
+
+        User new_user = new User { Email = userEmail, Balance = 10000};
+
+        _context.Users.Add(new_user);
         await _context.SaveChangesAsync();
         return true;
     }

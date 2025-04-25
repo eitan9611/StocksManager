@@ -7,11 +7,16 @@ from main import *
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from Model.ExampleModel import ApiClient
+from Present.TradePresent import *
+from Present.UserPresent import *
+
 
 
 class BodyContentFrame(ScrollableFrame):
+    email = ""
     def __init__(self,email):
         super().__init__()
+        self.email = email
 
         # Initialize API client
         self.api_client = ApiClient()
@@ -228,7 +233,8 @@ class BodyContentFrame(ScrollableFrame):
         layout.addWidget(balance_header)
 
         # Current balance amount
-        balance_amount = QLabel("$43,285.76")
+        balance = "$" + str(getBalance(self.email))
+        balance_amount = QLabel(balance)
         balance_amount.setStyleSheet("""
             font-size: 32px;
             font-weight: bold;
@@ -244,11 +250,11 @@ class BodyContentFrame(ScrollableFrame):
     def create_purchase_table(self):
         # Create table for purchase history
         table = QTableWidget()
-        table.setColumnCount(6)
-        table.setHorizontalHeaderLabels(["Date", "Stock", "Quantity", "Price", "Total", "Current Value"])
+        table.setColumnCount(5)
+        table.setHorizontalHeaderLabels(["Date", "Stock", "Quantity", "Price", "Total"])
 
-        # Sample data - TODO: fetch data for history of purchase
-        sample_data = [
+        sample_data = format_trades_for_view(self.email)
+        """sample_data = [
             ["2025-03-01", "AAPL", "10", "$174.25", "$1,742.50", "$1,810.30"],
             ["2025-03-05", "MSFT", "5", "$410.75", "$2,053.75", "$2,115.25"],
             ["2025-03-10", "TSLA", "3", "$178.33", "$534.99", "$510.15"],
@@ -256,40 +262,44 @@ class BodyContentFrame(ScrollableFrame):
             ["2025-03-20", "AMZN", "7", "$182.41", "$1,276.87", "$1,320.15"],
             ["2025-03-25", "META", "8", "$486.18", "$3,889.44", "$4,125.60"],
             ["2025-03-30", "NVDA", "4", "$905.33", "$3,621.32", "$3,850.44"]
-        ]
+        ]"""
 
-        table.setRowCount(len(sample_data))
+        if sample_data[0][0] == "Error":
+            #TODO - replace with message on screen
+            print(f"{sample_data[0][1]:}")
 
-        for row, (date, stock, quantity, price, total, value) in enumerate(sample_data):
-            table.setItem(row, 0, QTableWidgetItem(date))
-            table.setItem(row, 1, QTableWidgetItem(stock))
-            table.setItem(row, 2, QTableWidgetItem(quantity))
-            table.setItem(row, 3, QTableWidgetItem(price))
-            table.setItem(row, 4, QTableWidgetItem(total))
+        else:
+            table.setRowCount(len(sample_data))
 
-            # Highlight current value based on profit/loss
-            value_item = QTableWidgetItem(value)
+            for row, (type_, date, stock, quantity, price, total) in enumerate(sample_data):
+                table.setItem(row, 0, QTableWidgetItem(date))
+                table.setItem(row, 1, QTableWidgetItem(stock))
+                table.setItem(row, 2, QTableWidgetItem(quantity))
 
-            # Extract numeric values for comparison (removing $ and ,)
-            total_val = float(total.replace('$', '').replace(',', ''))
-            current_val = float(value.replace('$', '').replace(',', ''))
 
-            # Set color based on profit/loss
-            if current_val > total_val:
-                value_item.setForeground(QColor("green"))
-            elif current_val < total_val:
-                value_item.setForeground(QColor("red"))
+                # Highlight current value based on profit/loss
+                price_item = QTableWidgetItem(price)
+                total_item = QTableWidgetItem(total)
 
-            table.setItem(row, 5, value_item)
+                # Set color based on profit/loss
+                if type_ == 1:  # 0 for buy, 1 for sell
+                    price_item.setForeground(QColor("green"))
+                    total_item.setForeground(QColor("green"))
+                else:
+                    price_item.setForeground(QColor("red"))
+                    total_item.setForeground(QColor("red"))
 
-        # Set table properties
-        table.setAlternatingRowColors(True)
-        table.setSortingEnabled(True)
-        table.resizeColumnsToContents()
-        table.setSelectionBehavior(QAbstractItemView.SelectRows)
+                table.setItem(row, 3, price_item)
+                table.setItem(row, 4, total_item)
 
-        # Set a fixed height to match the space available
-        table.setMinimumHeight(300)
+            # Set table properties
+            table.setAlternatingRowColors(True)
+            table.setSortingEnabled(True)
+            table.resizeColumnsToContents()
+            table.setSelectionBehavior(QAbstractItemView.SelectRows)
+
+            # Set a fixed height to match the space available
+            table.setMinimumHeight(300)
 
         return table
 

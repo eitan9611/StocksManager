@@ -19,10 +19,10 @@ public class UserController : ControllerBase
         return user != null ? Ok(user) : NotFound("User not found.");
     }
 
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateUser([FromBody] User user)
+    [HttpPost("create/{userEmail}")]
+    public async Task<IActionResult> CreateUser(string userEmail)
     {
-        var success = await _userService.AddUserAsync(user);
+        var success = await _userService.AddUserAsync(userEmail);
         return success ? Ok("User created.") : BadRequest("Failed to create user.");
     }
 
@@ -32,7 +32,7 @@ public class UserController : ControllerBase
         var success = await _userService.UpdateBalanceAsync(userEmail, amount);
         return success ? Ok("Balance updated.") : BadRequest("Failed to update balance.");
     }
-    [HttpGet]
+    [HttpGet("get_all_users")]
     public async Task<ActionResult<List<User>>> GetAllUsers()
     {
         var users = await _userService.GetAllUsersAsync();

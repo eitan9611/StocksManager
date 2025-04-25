@@ -7,7 +7,7 @@ import requests
 class ApiClient:
     """Client for communicating with the backend API."""
 
-    def __init__(self, base_url: str = "http://localhost:5000/api"):
+    def __init__(self, base_url: str = "http://localhost:5050/api"):
         """Initialize the API client with a base URL."""
         self.base_url = base_url
         self.session = requests.Session()

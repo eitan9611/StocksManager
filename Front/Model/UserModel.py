@@ -1,6 +1,6 @@
 import requests
 
-BASE_URL = "http://localhost:5000/api"
+BASE_URL = "http://localhost:5025/api"
 
 def get_user(email):
     url = f"{BASE_URL}/user/{email}"

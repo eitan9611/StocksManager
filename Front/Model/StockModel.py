@@ -1,7 +1,7 @@
 import requests
 
 # Base URL for your backend API
-BASE_URL = "http://localhost:5000/api/stocks"  # Change the port if needed
+BASE_URL = "http://localhost:5025/api/stocks"  # Change the port if needed
 
 def get_all_stocks():
     """Fetch all stocks from the API."""
@@ -23,10 +23,11 @@ def get_stock_by_id(stock_id):
         print("Error fetching stock:", response.status_code, response.text)
     return None
 
-def add_stock(name, price, quantity):
+def add_stock(name, symbol, price, quantity):
     """Add a new stock."""
     stock_data = {
         "name": name,
+        "symbol": symbol,
         "price": price,
         "quantity": quantity
     }
@@ -38,11 +39,12 @@ def add_stock(name, price, quantity):
         print("Error adding stock:", response.status_code, response.text)
         return None
 
-def update_stock(stock_id, name, price, quantity):
+def update_stock(stock_id, name, symbol, price, quantity):
     """Update an existing stock."""
     stock_data = {
         "id": stock_id,
         "name": name,
+        "symbol": symbol,
         "price": price,
         "quantity": quantity
     }
@@ -68,6 +70,6 @@ def delete_stock(stock_id):
 if __name__ == "__main__":
     print("All Stocks:", get_all_stocks())
     print("Stock with ID 1:", get_stock_by_id(1))
-    add_stock("Apple Inc.", 145.30, 50)
-    update_stock(1, "Updated Stock", 150.00, 100)
+    add_stock("Apple Inc.", "AAPL", 145.30, 50)
+    update_stock(1, "Updated Stock", "AAPL",  150.00, 100)
     delete_stock(2)

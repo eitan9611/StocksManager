@@ -13,7 +13,7 @@ class SidePanel(Card):
 
         tesla_pixmap = QSvgPixmap(
             "./View/svgs/tesla.svg",
-            color=QColor("#E51837"),
+            color = QColor("#E51837"),
         )
 
         tesla_label = QLabel()
@@ -25,7 +25,7 @@ class SidePanel(Card):
 
         reports_button = SidePanelButton(
             "./View/svgs/reports.svg",
-            "My Stocks",
+            "My Stocksss",
             toggled=True,
         )
         reports_button.clicked.connect(lambda: self.navigation_requested.emit("My Stocks"))
@@ -49,6 +49,7 @@ class SidePanel(Card):
         activities_button = SidePanelButton(
             "./View/svgs/activities.svg",
             "Stock Info",
+            
         )
         activities_button.clicked.connect(lambda: self.navigation_requested.emit("Stocks Info"))
         main_lay.addWidget(activities_button)

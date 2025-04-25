@@ -13,16 +13,20 @@ namespace Backend.Data
         public DbSet<Trade> Trades { get; set; }
 
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // קשר בין משתמש למניות שהוא מחזיק
+            // Composite key: UserEmail + Symbol
+            modelBuilder.Entity<UserStock>()
+                .HasKey(us => new { us.UserEmail, us.Symbol });
+
+            // Relationship: UserStock → User (many-to-one)
             modelBuilder.Entity<UserStock>()
                 .HasOne<User>()
                 .WithMany(u => u.Portfolio)
                 .HasForeignKey(us => us.UserEmail);
         }
     }
+
 }

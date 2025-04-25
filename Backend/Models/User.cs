@@ -12,7 +12,6 @@ namespace Backend.Models
     }
     public class User
     {
-        public string Username { get; set; } = string.Empty;
         [Key]
         public string Email { get; set; } = string.Empty;
         public decimal Balance { get; set; } = 10000; // יתרה ראשונית ברירת מחדל

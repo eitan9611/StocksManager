@@ -1,7 +1,7 @@
 import requests
 
 # Base URL for your backend API
-BASE_URL = "http://localhost:5000/api/stocks"  # Change the port if needed
+BASE_URL = "http://localhost:5025/api/stocks"  # Change the port if needed
 
 def get_all_stocks():
     """Fetch all stocks from the API."""
@@ -64,10 +64,20 @@ def delete_stock(stock_id):
     else:
         print("Error deleting stock:", response.status_code, response.text)
 
+def get_details(symbol):
+    """Fetch detailed stock information by symbol."""
+    response = requests.get(f"{BASE_URL}/details/{symbol}")
+    if response.status_code == 200:
+        return response.json()
+    elif response.status_code == 404:
+        print("Stock details not found!")
+    else:
+        print("Error fetching stock details:", response.status_code, response.text)
+    return None
+
+
 # Example usage
 if __name__ == "__main__":
     print("All Stocks:", get_all_stocks())
     print("Stock with ID 1:", get_stock_by_id(1))
-    add_stock("Apple Inc.", 145.30, 50)
-    update_stock(1, "Updated Stock", 150.00, 100)
-    delete_stock(2)
+    print(get_details("AAPL"))

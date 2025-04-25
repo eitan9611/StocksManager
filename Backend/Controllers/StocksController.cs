@@ -51,5 +51,15 @@ namespace Backend.Controllers
             if (!success) return NotFound();
             return Ok();
         }
+
+        [HttpGet("details/{symbol}")]
+        public async Task<IActionResult> GetStockDetails(string symbol)
+        {
+            var result = await _stockService.GetStockDetailsAsync(symbol);
+            if (result == null)
+                return NotFound("Stock details not found.");
+
+            return Ok(result);
+        }
     }
 }

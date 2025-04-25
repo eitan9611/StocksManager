@@ -41,6 +41,22 @@ namespace Backend.Controllers
             Console.WriteLine(success);
             return success ? Ok("Stock sold successfully.") : BadRequest("Transaction failed.");
         }
+
+        [HttpGet("trades/{email}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetTradesByUser(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+                return BadRequest("Email is required.");
+
+            var trades = await _tradeService.GetUserTradesAsync(email);
+            if (trades == null || !trades.Any())
+                return NotFound("No trades found for the specified user.");
+
+            return Ok(trades);
+        }
+
     }
 
     public class TradeRequest

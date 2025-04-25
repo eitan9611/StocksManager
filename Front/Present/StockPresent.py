@@ -53,9 +53,9 @@ def getStockDetails(symbol):
     """Presentation layer function to fetch and display stock details."""
     details = get_details(symbol)
     if details:
-        return details
+        return True, details
     else:
-        return f"Details for symbol '{symbol}' not found."
+        return False, f"Details for symbol '{symbol}' not found."
 
 if __name__ == "__main__":
     symbol = "AAPL"

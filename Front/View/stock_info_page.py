@@ -1,10 +1,16 @@
 from View.commons import *
 from Model.ExampleModel import ApiClient
 
+from Present.TradePresent import *
+from Present.StockPresent import *
+
+
 
 class StockInfoPage(QFrame):
-    def __init__(self):
+    email = ""
+    def __init__(self, email):
         super().__init__()
+        self.email = email
 
         # Initialize API client
         self.api_client = ApiClient()
@@ -175,11 +181,13 @@ class StockInfoPage(QFrame):
             self.show_status("Please enter a stock symbol first", error=True)
             return
 
-        # TODO: Replace with actual API call to buy stock
+
         self.show_status(f"Processing purchase of {symbol}...", error=False)
 
-        # Simulate API call
-        QTimer.singleShot(1500, lambda: self.show_status(f"Successfully purchased {symbol} stock!", error=False))
+        # TODO: Replace with actual quantity
+        success, answer = handle_buy_stock(self.email, symbol, 1)
+
+        QTimer.singleShot(1500, lambda: self.show_status(answer, error=not success))
 
     def on_sell_stock(self):
         symbol = self.stock_input.text().strip().upper()
@@ -187,11 +195,12 @@ class StockInfoPage(QFrame):
             self.show_status("Please enter a stock symbol first", error=True)
             return
 
-        # TODO: Replace with actual API call to sell stock
         self.show_status(f"Processing sale of {symbol}...", error=False)
 
-        # Simulate API call
-        QTimer.singleShot(1500, lambda: self.show_status(f"Successfully sold {symbol} stock!", error=False))
+        # TODO: Replace with actual quantity
+        success, answer = handle_sell_stock(self.email, symbol, 1)
+
+        QTimer.singleShot(1500, lambda: self.show_status(answer, error=not success))
 
     def search_stock(self):
         symbol = self.stock_input.text().strip().upper()
@@ -206,33 +215,39 @@ class StockInfoPage(QFrame):
 
     def fetch_stock_info(self, symbol):
         try:
-            # TODO: Replace with actual API call
-            stock_info = self.api_client.get_stock_info(symbol)
+            success, stock_info = getStockDetails(symbol)
+            if not success:
+                self.show_status(stock_info, error=True)
 
-            # Update UI with stock info
-            self.stock_name.setText(f"Stock Name: {stock_info['name']}")
-            self.stock_price.setText(f"Current Price: ${stock_info['price']:.2f}")
+            else:
+                stock_info["price"] = float(stock_info["price"])
+                stock_info["change"] = float(stock_info["change"])
+                stock_info["change_percent"] = float(stock_info["change_percent"])
 
-            change_color = "green" if stock_info['change'] > 0 else "red"
-            change_sign = "+" if stock_info['change'] > 0 else ""
-            self.stock_change.setText(
-                f"Change: <span style='color:{change_color}'>{change_sign}{stock_info['change']:.2f} ({change_sign}{stock_info['change_percent']:.2f}%)</span>")
+                # Update UI with stock info
+                self.stock_name.setText(f"Stock Name: {stock_info['name']}")
+                self.stock_price.setText(f"Current Price: ${stock_info['price']:.2f}")
 
-            self.market_cap.setText(f"Market Cap: {stock_info['market_cap']}")
-            self.pe_ratio.setText(f"P/E Ratio: {stock_info['pe_ratio']}")
-            self.dividend_yield.setText(f"Dividend Yield: {stock_info['dividend_yield']}%")
+                change_color = "green" if stock_info['change'] > 0 else "red"
+                change_sign = "+" if stock_info['change'] > 0 else ""
+                self.stock_change.setText(
+                    f"Change: <span style='color:{change_color}'>{change_sign}{stock_info['change']:.2f} ({change_sign}{stock_info['change_percent']:.2f}%)</span>")
 
-            # Update stock description
-            self.stock_description.setText(stock_info['description'])
+                self.market_cap.setText(f"Market Cap: {stock_info['market_cap']}")
+                self.pe_ratio.setText(f"P/E Ratio: {stock_info['pe_ratio']}")
+                self.dividend_yield.setText(f"Dividend Yield: {stock_info['dividend_yield']}%")
 
-            # Update stock image - In a real implementation, this would fetch the company logo
-            # TODO: Replace with actual image fetching logic
-            self.update_stock_image(symbol)
+                # Update stock description
+                # self.stock_description.setText(stock_info['description'])
 
-            # Update graph
-            self.update_graph()
+                # Update stock image - In a real implementation, this would fetch the company logo
+                # TODO: Replace with actual image fetching logic
+                self.update_stock_image(symbol)
 
-            self.show_status("", error=False)
+                # Update graph
+                self.update_graph()
+
+                self.show_status("", error=False)
         except Exception as e:
             self.show_status(f"Error fetching stock info: {str(e)}", error=True)
 
@@ -245,7 +260,7 @@ class StockInfoPage(QFrame):
         # self.stock_image.setPixmap(QPixmap(f"./images/{symbol.lower()}.png"))
 
         # Stock symbol to company name mapping for demo purposes
-        company_names = {
+        """company_names = {
             "AAPL": "Apple Inc.",
             "MSFT": "Microsoft Corporation",
             "GOOGL": "Alphabet Inc.",
@@ -257,6 +272,7 @@ class StockInfoPage(QFrame):
 
         if symbol in company_names:
             self.stock_name.setText(f"Stock Name: {company_names[symbol]} ({symbol})")
+            """
 
     def update_graph(self):
         # Get current timeframe selection

@@ -26,7 +26,7 @@ class AnalyticsDashoard(QFrame):
         self.body = Body(email)
         self.page_stack.addWidget(self.body)
 
-        self.stock_info_page = StockInfoPage()
+        self.stock_info_page = StockInfoPage(email)
         self.page_stack.addWidget(self.stock_info_page)
 
         self.chatbot_page = ChatBotPage()

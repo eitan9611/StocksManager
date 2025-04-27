@@ -80,6 +80,5 @@ def get_details(symbol):
 
 # Example usage
 if __name__ == "__main__":
-    print("All Stocks:", get_all_stocks())
-    print("Stock with ID 1:", get_stock_by_id(1))
-    print(get_details("AAPL"))
+    data = get_details("AAPL")
+    print(data) # '0.62'

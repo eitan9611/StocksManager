@@ -81,6 +81,21 @@ class ChatBotPage(QFrame):
         # Text input field
         self.message_input = QLineEdit()
         self.message_input.setPlaceholderText("Type a message...")
+
+        # Adding styles to the message input
+        self.message_input.setStyleSheet("""
+            QLineEdit {
+                border: 2px solid #ccc;
+                border-radius: 10px;
+                padding: 10px;
+                font-size: 16px;
+                background-color: #f9f9f9;
+            }
+            QLineEdit:focus {
+                border: 2px solid #4CAF50;
+            }
+        """)
+
         self.message_input.returnPressed.connect(self.send_message)
         input_layout.addWidget(self.message_input, 1)
 

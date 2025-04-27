@@ -130,6 +130,28 @@
         }
       }
     },
+    "/api/Stocks/details/{symbol}": {
+      "get": {
+        "tags": [
+          "Stocks"
+        ],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/trade/buy": {
       "post": {
         "tags": [
@@ -232,6 +254,48 @@
         }
       }
     },
+    "/api/trade/trades/{email}": {
+      "get": {
+        "tags": [
+          "Trade"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/User/{email}": {
       "get": {
         "tags": [
@@ -254,30 +318,21 @@
         }
       }
     },
-    "/api/User/create": {
+    "/api/User/create/{userEmail}": {
       "post": {
         "tags": [
           "User"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
+        "parameters": [
+          {
+            "name": "userEmail",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -329,7 +384,7 @@
         }
       }
     },
-    "/api/User": {
+    "/api/User/get_all_users": {
       "get": {
         "tags": [
           "User"
@@ -444,10 +499,6 @@
       "User": {
         "type": "object",
         "properties": {
-          "username": {
-            "type": "string",
-            "nullable": true
-          },
           "email": {
             "type": "string",
             "nullable": true

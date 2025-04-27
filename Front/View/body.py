@@ -9,6 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from Model.ExampleModel import ApiClient
 from Present.TradePresent import *
 from Present.UserPresent import *
+from Present.StockPresent import *
 
 
 
@@ -67,37 +68,84 @@ class BodyContentFrame(ScrollableFrame):
         # TODO: Replace with actual API call
         self.dashboard_stats = self.api_client.get_dashboard_stats()
 
-        # Define card details using data from API
-        small_card_details = (
-            dict(
-                title="Active Users",
-                value=f"<a style='font-size: 26px; font-weight: bold;'>{self.dashboard_stats['active_users']['count']}</a><a style='font-size: 19px; font-weight: 700; color: rgba(0, 0, 0, .5);'>/{self.dashboard_stats['active_users']['total']}</a>",
-                default_value_style=False,
-            ),
-            dict(
-                title="Questions Answered",
-                value=f"{self.dashboard_stats['questions_answered']:,}",
-            ),
-            dict(
-                title="Av. Session Length",
-                value=self.dashboard_stats['avg_session_length'],
-            ),
-            dict(
-                title="Starting Knowledge",
-                value=f"{self.dashboard_stats['starting_knowledge']}%",
-                have_graph=True,
-            ),
-            dict(
-                title="Current Knowledge",
-                value=f"{self.dashboard_stats['current_knowledge']}%",
-                have_graph=True,
-            ),
-            dict(
-                title="Knowledge Gain",
-                value=f"+{self.dashboard_stats['knowledge_gain']}%",
-                have_graph=True,
-            ),
-        )
+
+
+
+        stock_symbols = ["AAPL", "TSLA", "MSFT" , "AMZN", "NFLX", "AMD"]
+
+        small_card_details = []
+
+        for symbol in stock_symbols:
+            info = get_details(symbol)
+            if not info:
+                continue  # אם לא חזר מידע, מדלגים
+
+            try:
+                change_percent = float(info['change_percent'])
+            except (KeyError, ValueError):
+                change_percent = 0
+
+            # קביעת צבע וסמל
+            if change_percent < 0:
+                color = "red"
+                icon = "⭝"
+            elif change_percent > 0:
+                color = "green"
+                icon = "⭜"
+            else:
+                color = "black"
+                icon = "⭯"
+
+            # יצירת כרטיס לכל מניה
+            card = dict(
+                title=f"{symbol}",
+                value=(
+                    f"<a style='font-size: 24px; font-weight: bold; color: {color};'>"
+                    f"{icon} {change_percent:.2f}%</a><br>"
+                    f"<a style='font-size: 18px; color: rgba(0, 0, 0, .6);'>"
+                    f"Price: ${info['price']}</a>"
+                ),
+                default_value_style=False
+            )
+
+            small_card_details.append(card)
+
+
+
+        # info = get_details("AAPL")
+        # change_percent = info['change_percent']
+        # # Define card details using data from API
+        # small_card_details = (
+        #     dict(
+        #         title = change_percent,
+        #         title="AAPL",
+        #         value=f"<a style='font-size: 26px; font-weight: bold;'>{self.dashboard_stats['active_users']['count']}</a><a style='font-size: 19px; font-weight: 700; color: rgba(0, 0, 0, .5);'>/{self.dashboard_stats['active_users']['total']}</a>",
+        #         default_value_style=False,
+        #     ),
+        #     dict(
+        #         title="Questions Answered",
+        #         value=f"{self.dashboard_stats['questions_answered']:,}",
+        #     ),
+        #     dict(
+        #         title="Av. Session Length",
+        #         value=self.dashboard_stats['avg_session_length'],
+        #     ),
+        #     dict(
+        #         title="Starting Knowledge",
+        #         value=f"{self.dashboard_stats['starting_knowledge']}%",
+        #         have_graph=True,
+        #     ),
+        #     dict(
+        #         title="Current Knowledge",
+        #         value=f"{self.dashboard_stats['current_knowledge']}%",
+        #         have_graph=True,
+        #     ),
+        #     dict(
+        #         title="Knowledge Gain",
+        #         value=f"+{self.dashboard_stats['knowledge_gain']}%",
+        #         have_graph=True,
+        #     ),
+        # )
 
         row, col = 0, 0
         for index, small_card_detail in enumerate(small_card_details):

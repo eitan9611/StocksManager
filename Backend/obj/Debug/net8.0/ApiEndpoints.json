@@ -79,6 +79,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Backend.Controllers.StocksController",
+    "Method": "GetStockDetails",
+    "RelativePath": "api/Stocks/details/{symbol}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "symbol",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Backend.Controllers.TradeController",
     "Method": "BuyStock",
     "RelativePath": "api/trade/buy",
@@ -141,22 +157,33 @@
     ]
   },
   {
-    "ContainingType": "UserController",
-    "Method": "GetAllUsers",
-    "RelativePath": "api/User",
+    "ContainingType": "Backend.Controllers.TradeController",
+    "Method": "GetTradesByUser",
+    "RelativePath": "api/trade/trades/{email}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[Backend.Models.User, Backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
         "MediaTypes": [
           "text/plain",
           "application/json",
           "text/json"
         ],
-        "StatusCode": 200
+        "StatusCode": 404
       }
     ]
   },
@@ -200,17 +227,37 @@
   {
     "ContainingType": "UserController",
     "Method": "CreateUser",
-    "RelativePath": "api/User/create",
+    "RelativePath": "api/User/create/{userEmail}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "user",
-        "Type": "Backend.Models.User",
+        "Name": "userEmail",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserController",
+    "Method": "GetAllUsers",
+    "RelativePath": "api/User/get_all_users",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[Backend.Models.User, Backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]

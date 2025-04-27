@@ -217,7 +217,7 @@ class BodyContentFrame(ScrollableFrame):
 
         # User email and welcome message
         user_info = QVBoxLayout()
-        welcome = QLabel("Welcome back!")
+        welcome = QLabel(userStatus(self.email))
         welcome.setObjectName("welcome_label")
 
         email = QLabel(user_email)
@@ -260,7 +260,7 @@ class BodyContentFrame(ScrollableFrame):
         email_layout.addWidget(user_icon)
 
         # User email label
-        email_label = QLabel(f"Welcome back, {email}")
+        email_label = QLabel(userStatus(self.email))
         email_label.setStyleSheet("""
             font-size: 16px;
             font-weight: 500;

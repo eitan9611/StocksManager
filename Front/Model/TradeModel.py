@@ -1,6 +1,6 @@
 import requests
 
-BASE_URL = "http://localhost:5025/api/trade"  # Adjust as needed
+BASE_URL = "http://localhost:5050/api/trade"  # Adjust as needed
 
 def buy_stock(email, symbol, quantity):
     url = f"{BASE_URL}/buy"

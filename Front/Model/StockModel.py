@@ -1,7 +1,7 @@
 import requests
 
 # Base URL for your backend API
-BASE_URL = "http://localhost:5025/api/stocks"  # Change the port if needed
+BASE_URL = "http://localhost:5050/api/stocks"  # Change the port if needed
 
 def get_all_stocks():
     """Fetch all stocks from the API."""

@@ -26,11 +26,34 @@ class StockInfoPage(QFrame):
         # Create search area
         search_layout = QHBoxLayout()
 
-        # Stock symbol input
+        # # Stock symbol input
+        # self.stock_input = QLineEdit()
+        # self.stock_input.setPlaceholderText("Enter stock symbol (e.g., AAPL, TSLA)")
+        # self.stock_input.returnPressed.connect(self.search_stock)
+        # search_layout.addWidget(self.stock_input, 1)
+        # Stock symbol input with border frame
+        input_frame = QFrame()
+        input_frame.setObjectName("input_frame")
+        input_frame.setStyleSheet("""
+            QFrame#input_frame {
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                padding: 4px;
+                background-color: white;
+            }
+        """)
+        input_layout = QVBoxLayout(input_frame)
+        input_layout.setContentsMargins(4, 4, 4, 4)
+
         self.stock_input = QLineEdit()
         self.stock_input.setPlaceholderText("Enter stock symbol (e.g., AAPL, TSLA)")
         self.stock_input.returnPressed.connect(self.search_stock)
-        search_layout.addWidget(self.stock_input, 1)
+        input_layout.addWidget(self.stock_input)
+
+        search_layout.addWidget(input_frame, 1)
+
+
+
 
         # Search button
         self.search_button = QPushButton("Search")
@@ -112,7 +135,11 @@ class StockInfoPage(QFrame):
 
         self.stock_description = QTextEdit()
         self.stock_description.setReadOnly(True)
-        self.stock_description.setPlaceholderText("Company description will appear here...")
+        
+        current_text = self.stock_description.toPlainText()
+        self.stock_description.setPlaceholderText(current_text)
+
+        # self.stock_description.setPlaceholderText(self.stock_description)
         self.stock_description.setMaximumHeight(300)  # Match the height of the graph
         description_layout.addWidget(self.stock_description)
 
@@ -235,7 +262,7 @@ class StockInfoPage(QFrame):
 
                 self.market_cap.setText(f"Market Cap: {stock_info['market_cap']}")
                 self.pe_ratio.setText(f"P/E Ratio: {stock_info['pe_ratio']}")
-                self.dividend_yield.setText(f"Dividend Yield: {stock_info['dividend_yield']}%")
+                self.dividend_yield.setText(f"Dividend Yield: {stock_info['dividend_yield']}")
 
                 # Update stock description
                 # self.stock_description.setText(stock_info['description'])

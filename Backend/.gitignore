@@ -4,3 +4,8 @@
 
 .vs/
 *.vsidx
+bin/
+obj/
+*.dll
+*.exe
+*.pdb

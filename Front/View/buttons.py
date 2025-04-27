@@ -26,10 +26,33 @@ class SidePanelButton(QPushButton):
 
         self.toggled.connect(self.toggledEvent)
 
+
+    ### the previous one
+    # def toggledEvent(self, toggled: bool):
+    #     color = "#1B59F8" if toggled else "#4c4c4c"
+    #     self._icon.setPixmap(QSvgPixmap(self.svg, color=color))
+    #     self.label.setObjectName("selected" if toggled else "non_selected")
+
+    #     self.window().setStyleSheet(STYLE_QSS)
+
+
+
     def toggledEvent(self, toggled: bool):
-        color = "#1B59F8" if toggled else "#4c4c4c"
+        color = "#000000" if toggled else "#4c4c4c"
         self._icon.setPixmap(QSvgPixmap(self.svg, color=color))
+
+        # Text color
+        if toggled:
+            self.label.setStyleSheet("color: #000000;")  
+        else:
+            self.label.setStyleSheet("color: #000000;") 
+
         self.label.setObjectName("selected" if toggled else "non_selected")
+
+        # רענון של הסגנון כדי שהטקסט לא ייעלם
+        self.label.style().unpolish(self.label)
+        self.label.style().polish(self.label)
+        self.label.update()
 
         self.window().setStyleSheet(STYLE_QSS)
 

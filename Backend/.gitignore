@@ -1,5 +1,14 @@
 ".vs/" 
-".vs/" 
+# Build results
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.cache
+*.json
+*.editorconfig
+*.user
 .venv/
 
 .vs/

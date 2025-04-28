@@ -251,28 +251,41 @@ class StockInfoPage(QFrame):
         except Exception as e:
             self.show_status(f"Error fetching stock info: {str(e)}", error=True)
 
+
+    def show_status(self, message, error=False):
+        if not message:
+            self.status_label.setVisible(False)
+            return
+
+        self.status_label.setVisible(True)
+        self.status_label.setText(message)
+        self.status_label.setStyleSheet("color: red;" if error else "color: green;")
+
+
     def update_stock_image(self, symbol):
-        # This is a placeholder - In a real implementation, you would fetch the company logo
-        # TODO: Replace with actual image fetching logic
-        self.stock_image.setText(f"{symbol}\nLogo")
+        try:
+            # Get logo using the stock symbol
+            logo_response = getStockLogo(symbol)
+            
+            # Check if logo_response is valid before proceeding
+            if logo_response and hasattr(logo_response, 'content'):
+                pixmap = QPixmap()
+                pixmap.loadFromData(logo_response.content)
+                
+                # Scale the logo to fit the frame while maintaining aspect ratio
+                pixmap = pixmap.scaled(140, 140, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+                self.stock_image.setPixmap(pixmap)
+            else:
+                # If no logo found, display text with the symbol
+                self.stock_image.setText(symbol)
+        except Exception as e:
+            print(f"Error displaying logo for {symbol}: {e}")
+            self.stock_image.setText(symbol)
 
-        # Example of how you might set an image if available:
-        # self.stock_image.setPixmap(QPixmap(f"./images/{symbol.lower()}.png"))
 
-        # Stock symbol to company name mapping for demo purposes
-        """company_names = {
-            "AAPL": "Apple Inc.",
-            "MSFT": "Microsoft Corporation",
-            "GOOGL": "Alphabet Inc.",
-            "AMZN": "Amazon.com, Inc.",
-            "META": "Meta Platforms, Inc.",
-            "TSLA": "Tesla, Inc.",
-            "NVDA": "NVIDIA Corporation"
-        }
 
-        if symbol in company_names:
-            self.stock_name.setText(f"Stock Name: {company_names[symbol]} ({symbol})")
-            """
+
+        
 
     def update_graph(self):
         # Get current timeframe selection
@@ -297,11 +310,3 @@ class StockInfoPage(QFrame):
         # In a real implementation, this would fetch historical data and update the graph
         # TODO: Replace with actual graph implementation
 
-    def show_status(self, message, error=False):
-        if not message:
-            self.status_label.setVisible(False)
-            return
-
-        self.status_label.setText(message)
-        self.status_label.setStyleSheet("color: red" if error else "color: green")
-        self.status_label.setVisible(True)

@@ -1,6 +1,7 @@
 import yfinance as yf
 import datetime
 from Model.StockModel import *
+import requests
 
 
 def get_prices_last_year(symbol):
@@ -56,6 +57,49 @@ def getStockDetails(symbol):
         return True, details
     else:
         return False, f"Details for symbol '{symbol}' not found."
+
+
+from io import BytesIO
+def getStockLogo(symbol):
+    """Fetch stock information and logo using Alpha Vantage."""
+    try:
+        # Using the provided Alpha Vantage API key
+        api_key = "I39K602M3LZF843Q"
+        
+        # First try to get company information from Alpha Vantage
+        url = f"https://www.alphavantage.co/query?function=OVERVIEW&symbol={symbol}&apikey={api_key}"
+        response = requests.get(url)
+        data = response.json()
+        
+        if data and 'Symbol' in data:
+            # Alpha Vantage doesn't provide logos directly in their API
+            # So we'll use a service that generates logos based on the company name or symbol
+            
+            # If company name is available, use it for a better logo
+            if 'Name' in data and data['Name']:
+                company_name = data['Name'].split(' ')[0]  # Use first word of company name
+                logo_url = f"https://ui-avatars.com/api/?name={company_name}&background=random&color=fff&size=150&bold=true"
+            else:
+                # Fall back to using the symbol
+                logo_url = f"https://ui-avatars.com/api/?name={symbol}&background=random&color=fff&size=150&bold=true"
+                
+            logo_response = requests.get(logo_url)
+            return logo_response
+        else:
+            # If Alpha Vantage doesn't have data, just generate a logo from the symbol
+            logo_url = f"https://ui-avatars.com/api/?name={symbol}&background=random&color=fff&size=150&bold=true"
+            return requests.get(logo_url)
+            
+    except Exception as e:
+        print(f"Error in getStockLogo: {e}")
+        
+        # As a last resort, still try to return a generated logo
+        try:
+            logo_url = f"https://ui-avatars.com/api/?name={symbol}&background=random&color=fff&size=150&bold=true"
+            return requests.get(logo_url)
+        except:
+            return None
+
 
 if __name__ == "__main__":
     symbol = "AAPL"

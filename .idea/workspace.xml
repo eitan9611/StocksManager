@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5fe158d4-0a5c-479c-8a03-9fddd2ce0665" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Backend/.dockerignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Models/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Models/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/bin/Debug/net8.0/Backend.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/bin/Debug/net8.0/Backend.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/bin/Debug/net8.0/Backend.exe" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/bin/Debug/net8.0/Backend.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/bin/Debug/net8.0/Backend.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/bin/Debug/net8.0/Backend.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/obj/Container/ContainerCreationResult.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/obj/Container/ContainerCreationResult.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/obj/Container/ContainerId.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/obj/Container/ContainerId.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/obj/Container/ImageBuildContext.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/obj/Container/ImageBuildContext.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/obj/Container/ImageId.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/obj/Container/ImageId.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/Backend.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/Backend.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/Backend.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/Backend.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/Backend.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/Backend.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/Backend.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/Backend.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/Backend.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/Backend.sourcelink.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/apphost.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/ref/Backend.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/ref/Backend.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/refint/Backend.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/obj/Debug/net8.0/refint/Backend.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Front/Model/StockModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/Front/Model/StockModel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Front/Model/TradeModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/Front/Model/TradeModel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Front/Model/UserModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/Front/Model/UserModel.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2wBOXIDld4O41rH6SNmXTPmZt3q" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-fb887030ada0-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.21565.199" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5fe158d4-0a5c-479c-8a03-9fddd2ce0665" name="Changes" comment="" />
+      <created>1745511544258</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1745511544258</updated>
+    </task>
+    <servers />
+  </component>
+</project>

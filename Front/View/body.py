@@ -373,6 +373,37 @@ class BodyContentFrame(ScrollableFrame):
         year_button = QPushButton("Year")
         year_button.setCheckable(True)
 
+
+        # סטייל יפה לכפתורים
+        button_style = """
+        QPushButton {
+            background-color: #396dc6;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 4px 10px;  /* פחות ריווח פנימי */
+            font-size: 12px;    /* טקסט קצת יותר קטן */
+        }
+
+        QPushButton:checked {
+            background-color: #396dc6;
+            color: black;
+            border: 1.1px solid #000000;
+        }
+  
+        QPushButton:hover {
+            background-color: #4c666f;
+        }
+        """
+
+
+        # החלת העיצוב על כל הכפתורים
+        day_button.setStyleSheet(button_style)
+        week_button.setStyleSheet(button_style)
+        month_button.setStyleSheet(button_style)
+        year_button.setStyleSheet(button_style)
+
+
+
         # Add buttons to button group for exclusive selection
         timeframe_group = QButtonGroup(frame)
         timeframe_group.addButton(day_button)

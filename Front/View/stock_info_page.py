@@ -1,8 +1,10 @@
 from View.commons import *
 from Model.ExampleModel import ApiClient
-
+from PySide6.QtWidgets import QCompleter
 from Present.TradePresent import *
 from Present.StockPresent import *
+import pandas as pd
+from PySide6.QtWidgets import QCompleter
 
 
 
@@ -48,6 +50,16 @@ class StockInfoPage(QFrame):
         self.stock_input = QLineEdit()
         self.stock_input.setPlaceholderText("Enter stock symbol (e.g., AAPL, TSLA)")
         self.stock_input.returnPressed.connect(self.search_stock)
+
+        # שליפת מניות
+        sp500 = pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')[0]
+        symbols = sp500['Symbol'].tolist()
+
+        # קומפליטר
+        completer = QCompleter(symbols)
+        completer.setCaseSensitivity(Qt.CaseInsensitive)
+        self.stock_input.setCompleter(completer)
+
         input_layout.addWidget(self.stock_input)
 
         search_layout.addWidget(input_frame, 1)

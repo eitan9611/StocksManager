@@ -15,8 +15,6 @@ namespace Backend.Models
         public string Email { get; set; } = string.Empty;
         public decimal Balance { get; set; } = 10000; // יתרה ראשונית ברירת מחדל
 
-        //this won't be in table vvvv
-
         public List<UserStock> Portfolio { get; set; } = new List<UserStock>();
     }
 }

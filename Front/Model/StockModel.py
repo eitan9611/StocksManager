@@ -23,10 +23,11 @@ def get_stock_by_id(stock_id):
         print("Error fetching stock:", response.status_code, response.text)
     return None
 
-def add_stock(name, price, quantity):
+def add_stock(name, symbol, price, quantity):
     """Add a new stock."""
     stock_data = {
         "name": name,
+        "symbol": symbol,
         "price": price,
         "quantity": quantity
     }
@@ -38,11 +39,12 @@ def add_stock(name, price, quantity):
         print("Error adding stock:", response.status_code, response.text)
         return None
 
-def update_stock(stock_id, name, price, quantity):
+def update_stock(stock_id, name, symbol, price, quantity):
     """Update an existing stock."""
     stock_data = {
         "id": stock_id,
         "name": name,
+        "symbol": symbol,
         "price": price,
         "quantity": quantity
     }
@@ -78,6 +80,5 @@ def get_details(symbol):
 
 # Example usage
 if __name__ == "__main__":
-    print("All Stocks:", get_all_stocks())
-    print("Stock with ID 1:", get_stock_by_id(1))
-    print(get_details("AAPL"))
+    data = get_details("AAPL")
+    print(data) # '0.62'

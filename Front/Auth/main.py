@@ -6,7 +6,15 @@ from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, Q
 from PySide6.QtCore import Qt
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import threading
-import os
+import os   
+from PySide6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout
+from PySide6.QtGui import QPixmap
+# from PySide6.QtSvg import QGraphicsSvgItem
+from PySide6.QtGui import QPainter
+
+from PySide6.QtWidgets import QGraphicsScene, QGraphicsView
+from PySide6.QtSvgWidgets import QGraphicsSvgItem
+
 
 # Google OAuth settings
 CLIENT_ID = "694671541821-spb05gl88fh798oh4vd1o6nn4ughdm2t.apps.googleusercontent.com"
@@ -51,27 +59,85 @@ class OAuthHandler(BaseHTTPRequestHandler):
             """)
             self.server.auth_code_received = True
 
+
+
+
+### worked!
 class LoginWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Login with Google")
-        self.setGeometry(100, 100, 400, 200)
+        self.setWindowTitle("Stock4U - Login")
+        self.setGeometry(100, 100, 800, 400)  # Adjusted window size for better layout
 
-        layout = QVBoxLayout()
+        # Create the main layout (two columns)
+        main_layout = QHBoxLayout()
 
-        self.label = QLabel("Click below to login with Google")
-        self.label.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.label)
+       # Left part - SVG image using QGraphicsSvgItem 
+        scene = QGraphicsScene()
+        pixmap = QPixmap("./View/svgs/wmremove-transformed.jpeg")
+
+        # 🔥 להקטין את הפיקסמאפ לפני שמציגים
+        scaled_pixmap = pixmap.scaled(800, 400, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+
+        label = QLabel()
+        label.setPixmap(scaled_pixmap)
+
+        main_layout.addWidget(label)
+
+
+        # # view.setRenderHint(view.RenderHints.Antialiasing)  # Optional: Better rendering quality
+        # view.setRenderHint(QPainter.Antialiasing)
+        # # view.setRenderHint(view.RenderHints.SmoothPixmapTransform)
+        # view.setRenderHint(QPainter.SmoothPixmapTransform)
+
+        # view.setSceneRect(scene.itemsBoundingRect())  # Important: set the scene rect properly
+        # view.fitInView(scene.itemsBoundingRect(), Qt.KeepAspectRatio)  # Make the SVG fit nicely
+        # view.scale(1, 2)  # אם אתה רוצה לראות ממש גדול
+
+        # view.setMinimumSize(400, 400)  # Size of the widget (can be adjusted)
+
+        # main_layout.addWidget(view, 1)
+
+
+        # Right part - Website title and button
+        right_layout = QVBoxLayout()
+
+        self.title_label = QLabel("Welcome to Stock4U")
+        self.title_label.setAlignment(Qt.AlignCenter)
+        self.title_label.setStyleSheet("font-size: 24px; font-weight: bold; color: #333;")
 
         self.login_button = QPushButton("Login with Google")
+        self.login_button.setFixedSize(200, 40)
+        self.login_button.setStyleSheet("""
+            QPushButton {
+                background-color: #4CAF50;
+                color: white;
+                font-size: 16px;
+                border-radius: 10px;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+            }
+        """)
         self.login_button.clicked.connect(self.open_google_login)
-        layout.addWidget(self.login_button)
 
         self.user_info_label = QLabel("")
-        layout.addWidget(self.user_info_label)
+        self.user_info_label.setAlignment(Qt.AlignCenter)
 
-        self.setLayout(layout)
+        # Adding spacers for layout
+        right_layout.addStretch()  # Add space before the title
+        right_layout.addWidget(self.title_label)
+        right_layout.addSpacing(20)  # Add space between title and button
+        right_layout.addWidget(self.login_button, alignment=Qt.AlignCenter)
+        right_layout.addSpacing(20)  # Add space between button and user info label
+        right_layout.addWidget(self.user_info_label)
+        right_layout.addStretch()  # Add space after user info label
+
+        # Add the right part layout
+        main_layout.addLayout(right_layout, 1)  # Add the right part with proportional sizing (1)
+
+        self.setLayout(main_layout)
 
     def open_google_login(self):
         """Open Google OAuth login in a browser and start local server"""

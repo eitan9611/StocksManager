@@ -1,40 +1,30 @@
-import sys
-import webbrowser
-import requests
-import urllib.parse
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel
+from PySide6.QtWidgets import (QApplication, QWidget, QLabel, QPushButton, QVBoxLayout,
+                               QHBoxLayout, QLineEdit, QCheckBox, QFrame, QScrollArea)
+from PySide6.QtGui import QPixmap, QCursor
 from PySide6.QtCore import Qt
-from http.server import BaseHTTPRequestHandler, HTTPServer
+import urllib.parse
+import webbrowser
 import threading
-import os   
-from PySide6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout
-from PySide6.QtGui import QPixmap
-# from PySide6.QtSvg import QGraphicsSvgItem
-from PySide6.QtGui import QPainter
+import requests
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import os
+import sys
 
-from PySide6.QtWidgets import QGraphicsScene, QGraphicsView
-from PySide6.QtSvgWidgets import QGraphicsSvgItem
-
-
-# Google OAuth settings
+# Google OAuth constants
 CLIENT_ID = "694671541821-spb05gl88fh798oh4vd1o6nn4ughdm2t.apps.googleusercontent.com"
 CLIENT_SECRET = "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"
 REDIRECT_URI = "http://localhost:5025/callback"
 AUTH_URL = f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&scope=openid email"
 
-class OAuthHandler(BaseHTTPRequestHandler):
-    """Handles the OAuth callback request"""
 
+class OAuthHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        """Extract authorization code from the request"""
         query = urllib.parse.urlparse(self.path).query
         params = urllib.parse.parse_qs(query)
 
         if "code" in params:
             auth_code = params["code"][0]
-            self.server.auth_code = auth_code  # Store it in the server instance
-
-            # Send response to the user
+            self.server.auth_code = auth_code
             self.send_response(200)
             self.send_header("Content-Type", "text/html")
             self.end_headers()
@@ -47,9 +37,6 @@ class OAuthHandler(BaseHTTPRequestHandler):
                                 window.open('', '_self', '');
                                 window.close();
                             }
-                            setTimeout(function() {
-                                alert('Authorization successful. You can close this window.');
-                            }, 1000);
                         </script>
                     </head>
                     <body>
@@ -60,109 +47,189 @@ class OAuthHandler(BaseHTTPRequestHandler):
             self.server.auth_code_received = True
 
 
-
-
-### worked!
 class LoginWindow(QWidget):
     def __init__(self):
         super().__init__()
 
+        screen_geometry = QApplication.primaryScreen().geometry()
+        screen_width = screen_geometry.width()
+        screen_height = screen_geometry.height()
+
+        window_width = int(screen_width * 0.7)
+        window_height = int(screen_height * 0.7)
+
         self.setWindowTitle("Stock4U - Login")
-        self.setGeometry(100, 100, 800, 400)  # Adjusted window size for better layout
+        self.setGeometry(100, 100, window_width, window_height)
 
-        # Create the main layout (two columns)
-        main_layout = QHBoxLayout()
+        self.init_ui()
 
-       # Left part - SVG image using QGraphicsSvgItem 
-        scene = QGraphicsScene()
+    def init_ui(self):
+        main_layout = QHBoxLayout(self)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
+
+        # Left side (image)
+        left_frame = QFrame()
+        left_frame.setMinimumWidth(400)
+        left_frame.setStyleSheet("background-color: black;")
+
+        self.image_label = QLabel()
         pixmap = QPixmap("./View/svgs/wmremove-transformed.jpeg")
+        self.image_label.setPixmap(pixmap)
+        self.image_label.setScaledContents(True)
+        self.image_label.setAlignment(Qt.AlignCenter)
 
-        # 🔥 להקטין את הפיקסמאפ לפני שמציגים
-        scaled_pixmap = pixmap.scaled(800, 400, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        left_layout = QVBoxLayout(left_frame)
+        left_layout.setContentsMargins(0, 0, 0, 0)
+        left_layout.addWidget(self.image_label)
 
-        label = QLabel()
-        label.setPixmap(scaled_pixmap)
+        # Right side (form with scroll)
+        right_frame = QFrame()
+        right_layout = QVBoxLayout(right_frame)
+        right_layout.setContentsMargins(0, 0, 0, 0)
 
-        main_layout.addWidget(label)
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
 
+        scroll_container = QWidget()
+        scroll_layout = QVBoxLayout(scroll_container)
+        scroll_layout.setAlignment(Qt.AlignCenter)
 
-        # # view.setRenderHint(view.RenderHints.Antialiasing)  # Optional: Better rendering quality
-        # view.setRenderHint(QPainter.Antialiasing)
-        # # view.setRenderHint(view.RenderHints.SmoothPixmapTransform)
-        # view.setRenderHint(QPainter.SmoothPixmapTransform)
+        login_frame = QFrame()
+        login_frame.setStyleSheet("background-color: white; border-radius: 20px;")
+        login_layout = QVBoxLayout(login_frame)
+        login_layout.setContentsMargins(60, 60, 60, 60)
+        login_layout.setSpacing(20)
 
-        # view.setSceneRect(scene.itemsBoundingRect())  # Important: set the scene rect properly
-        # view.fitInView(scene.itemsBoundingRect(), Qt.KeepAspectRatio)  # Make the SVG fit nicely
-        # view.scale(1, 2)  # אם אתה רוצה לראות ממש גדול
+        # Title
+        title_label = QLabel("USER LOGIN")
+        title_label.setStyleSheet("font-size: 24px; font-weight: bold; color: #6C63FF;")
+        title_label.setAlignment(Qt.AlignCenter)
 
-        # view.setMinimumSize(400, 400)  # Size of the widget (can be adjusted)
-
-        # main_layout.addWidget(view, 1)
-
-
-        # Right part - Website title and button
-        right_layout = QVBoxLayout()
-
-        self.title_label = QLabel("Welcome to Stock4U")
-        self.title_label.setAlignment(Qt.AlignCenter)
-        self.title_label.setStyleSheet("font-size: 24px; font-weight: bold; color: #333;")
-
-        self.login_button = QPushButton("Login with Google")
-        self.login_button.setFixedSize(200, 40)
-        self.login_button.setStyleSheet("""
-            QPushButton {
-                background-color: #4CAF50;
-                color: white;
+        # Username input
+        self.username_input = QLineEdit()
+        self.username_input.setPlaceholderText("Username or Email")
+        self.username_input.setFixedHeight(40)
+        self.username_input.setStyleSheet("""
+            QLineEdit {
+                background-color: #f0f0f0;
+                border: none;
+                border-radius: 20px;
+                padding-left: 15px;
                 font-size: 16px;
-                border-radius: 10px;
-            }
-            QPushButton:hover {
-                background-color: #45a049;
             }
         """)
-        self.login_button.clicked.connect(self.open_google_login)
 
-        self.user_info_label = QLabel("")
-        self.user_info_label.setAlignment(Qt.AlignCenter)
+        # Password input
+        self.password_input = QLineEdit()
+        self.password_input.setPlaceholderText("Password")
+        self.password_input.setEchoMode(QLineEdit.Password)
+        self.password_input.setFixedHeight(40)
+        self.password_input.setStyleSheet("""
+            QLineEdit {
+                background-color: #f0f0f0;
+                border: none;
+                border-radius: 20px;
+                padding-left: 15px;
+                font-size: 16px;
+            }
+        """)
 
-        # Adding spacers for layout
-        right_layout.addStretch()  # Add space before the title
-        right_layout.addWidget(self.title_label)
-        right_layout.addSpacing(20)  # Add space between title and button
-        right_layout.addWidget(self.login_button, alignment=Qt.AlignCenter)
-        right_layout.addSpacing(20)  # Add space between button and user info label
-        right_layout.addWidget(self.user_info_label)
-        right_layout.addStretch()  # Add space after user info label
+        # Options layout
+        options_layout = QHBoxLayout()
+        self.remember_checkbox = QCheckBox("Remember me")
+        self.remember_checkbox.setStyleSheet("font-size: 14px;")
+        forgot_password_label = QLabel('<a href="#">Forgot password?</a>')
+        forgot_password_label.setStyleSheet("font-size: 14px; color: #6C63FF;")
+        forgot_password_label.setOpenExternalLinks(True)
+        forgot_password_label.setCursor(QCursor(Qt.PointingHandCursor))
+        options_layout.addWidget(self.remember_checkbox)
+        options_layout.addStretch()
+        options_layout.addWidget(forgot_password_label)
 
-        # Add the right part layout
-        main_layout.addLayout(right_layout, 1)  # Add the right part with proportional sizing (1)
+        # Login button
+        self.login_button = QPushButton("LOGIN")
+        self.login_button.setFixedHeight(45)
+        self.login_button.setStyleSheet("""
+            QPushButton {
+                background-color: qlineargradient(
+                    spread:pad, x1:0, y1:0, x2:1, y2:0,
+                    stop:0 #6C63FF, stop:1 #A084E8);
+                color: white;
+                border: none;
+                border-radius: 22px;
+                font-size: 18px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #5A54D1;
+            }
+        """)
+        self.login_button.clicked.connect(self.open_main_window)
 
-        self.setLayout(main_layout)
+        # Google login button
+        self.google_login_button = QPushButton("LOGIN WITH GOOGLE")
+        self.google_login_button.setFixedHeight(45)
+        self.google_login_button.setStyleSheet("""
+            QPushButton {
+                background-color: white;
+                color: #6C63FF;
+                border: 2px solid #6C63FF;
+                border-radius: 22px;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #f2f2f2;
+            }
+        """)
+        self.google_login_button.clicked.connect(self.open_google_login)
+
+        # Assemble login layout
+        login_layout.addWidget(title_label)
+        login_layout.addWidget(self.username_input)
+        login_layout.addWidget(self.password_input)
+        login_layout.addLayout(options_layout)
+        login_layout.addWidget(self.login_button)
+        login_layout.addWidget(self.google_login_button)
+
+        scroll_layout.addWidget(login_frame)
+        scroll_area.setWidget(scroll_container)
+        right_layout.addWidget(scroll_area)
+
+        # Add frames to main layout
+        main_layout.addWidget(left_frame, 3)
+        main_layout.addWidget(right_frame, 2)
+
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        if not self.image_label.pixmap().isNull():
+            pixmap = QPixmap("./View/svgs/wmremove-transformed.jpeg")
+            height = self.image_label.height()
+            scaled_pixmap = pixmap.scaledToHeight(height, Qt.SmoothTransformation)
+            self.image_label.setPixmap(scaled_pixmap)
+
+    def open_main_window(self):
+        user_email = "eitan@"
+        os.system(f"python ./View/main.py {user_email}")
+        self.close()
 
     def open_google_login(self):
-        """Open Google OAuth login in a browser and start local server"""
         self.start_local_server()
-
         webbrowser.open(AUTH_URL)
-
-        # Wait until the auth code is received
         while not self.server.auth_code_received:
             self.server.handle_request()
-
         auth_code = self.server.auth_code
         self.exchange_code_for_token(auth_code)
 
     def start_local_server(self):
-        """Start a local HTTP server to capture the OAuth callback"""
         self.server = HTTPServer(("localhost", 5025), OAuthHandler)
         self.server.auth_code_received = False
-
-        # Run the server in a separate thread
         server_thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         server_thread.start()
 
     def exchange_code_for_token(self, auth_code):
-        """Exchange authorization code for an access token and ID token"""
         token_url = "https://oauth2.googleapis.com/token"
         data = {
             "code": auth_code,
@@ -171,30 +238,25 @@ class LoginWindow(QWidget):
             "redirect_uri": REDIRECT_URI,
             "grant_type": "authorization_code",
         }
-
         response = requests.post(token_url, data=data)
         if response.status_code == 200:
             tokens = response.json()
             id_token = tokens.get("id_token")
             self.get_user_info(id_token)
         else:
-            self.label.setText("Login failed! Try again.")
+            print("Login failed! Try again.")
 
     def get_user_info(self, id_token):
-        """Extract user info from ID token"""
         user_info_url = "https://oauth2.googleapis.com/tokeninfo"
         response = requests.get(user_info_url, params={"id_token": id_token})
-
         if response.status_code == 200:
             user_info = response.json()
             user_email = user_info.get("email", "Unknown email")
             os.system(f"python ./View/main.py {user_email}")
-            #close the login window
             self.close()
-            #user_email = user_info.get("email", "Unknown email")
-            #self.user_info_label.setText(f"Logged in as: {user_email}")
         else:
-            self.label.setText("Failed to retrieve user info")
+            print("Failed to retrieve user info")
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -1,6 +1,7 @@
 {
   "format": 1,
   "restore": {
+<<<<<<< HEAD
     "C:\\Users\\yair5\\StocksManager\\Backend\\Backend.csproj": {}
   },
   "projects": {
@@ -12,6 +13,19 @@
         "projectPath": "C:\\Users\\yair5\\StocksManager\\Backend\\Backend.csproj",
         "packagesPath": "C:\\Users\\yair5\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\yair5\\StocksManager\\Backend\\obj\\",
+=======
+    "C:\\Users\\User\\OneDrive\\שולחן העבודה\\WS\\StocksManager\\Backend\\Backend.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\User\\OneDrive\\שולחן העבודה\\WS\\StocksManager\\Backend\\Backend.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\User\\OneDrive\\שולחן העבודה\\WS\\StocksManager\\Backend\\Backend.csproj",
+        "projectName": "Backend",
+        "projectPath": "C:\\Users\\User\\OneDrive\\שולחן העבודה\\WS\\StocksManager\\Backend\\Backend.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\OneDrive\\שולחן העבודה\\WS\\StocksManager\\Backend\\obj\\",
+>>>>>>> cb39a7c314d9d0085f12f0f1f62a34d3d930ecf6
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -26,7 +40,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

@@ -8,20 +8,23 @@ class SidePanel(Card):
 
     def __init__(self):
         super().__init__()
+        
+        self.setStyleSheet("background-color: #303030;")
 
         main_lay = QVBoxLayout(self)
 
-        tesla_pixmap = QSvgPixmap(
-            "./View/svgs/tesla.svg",
-            color = QColor("#E51837"),
-        )
+        tesla_pixmap = QSvgPixmap("./View/svgs/logo.svg")
+        # הוספת שורת הגדלה לגודל הרצוי (למשל 150x150 פיקסלים)
+        scaled_pixmap = tesla_pixmap.scaled(200,200, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
 
         tesla_label = QLabel()
         tesla_label.setObjectName("tesla_label")
-        tesla_label.setPixmap(tesla_pixmap)
-        main_lay.addWidget(tesla_label)
+        tesla_label.setPixmap(scaled_pixmap)  # שים את התמונה המוגדלת בלייבל
 
-        main_lay.addSpacing(43)
+        main_lay.addStretch(1)
+        main_lay.addWidget(tesla_label, alignment=Qt.AlignmentFlag.AlignHCenter)
+        main_lay.addStretch(2)
+
 
         reports_button = SidePanelButton(
             "./View/svgs/reports.svg",

@@ -33,7 +33,7 @@ class BodyContentFrame(ScrollableFrame):
         super().__init__()
 
 
-        self.setStyleSheet("""
+        self.setStyleSheet("""  
         QScrollBar:vertical {
             background: #f0f0f0;
             width: 12px;
@@ -188,6 +188,11 @@ class BodyContentFrame(ScrollableFrame):
         main_lay.addWidget(self.profit_loss_graph)
 
         main_lay.addStretch()
+
+
+
+    
+
 
     def create_user_profile(self):
         """Create a user profile section displaying the email"""
@@ -801,7 +806,7 @@ class BodyContentFrame(ScrollableFrame):
 class Body(QFrame):
     def __init__(self,email):
         super().__init__()
-
+        
         main_lay = QVBoxLayout(self)
 
         top_lay = QHBoxLayout()
@@ -822,9 +827,10 @@ class Body(QFrame):
                 color: #4c4c4c;
             }
             QPushButton:hover {
-                color: #1B59F8;
+                color: #1B59F8; 
             }
         """)
+        
         top_lay.addWidget(download_button)
 
         # חיבור לפונקציה שתיצור את קובץ האקסל

@@ -1,90 +1,85 @@
 from buttons import *
 from cards import *
-
-
 class SidePanel(Card):
     # Create a signal for navigation
     navigation_requested = Signal(str)
-
     def __init__(self):
         super().__init__()
         
-        self.setStyleSheet("background-color: #303030;")
-
-        main_lay = QVBoxLayout(self)
-
-        tesla_pixmap = QSvgPixmap("./View/svgs/logo.svg")
-        # הוספת שורת הגדלה לגודל הרצוי (למשל 150x150 פיקסלים)
-        scaled_pixmap = tesla_pixmap.scaled(200,200, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
-
+        self.setStyleSheet("""
+            background-color: #2f2f2f;
+            /* גורם למרחב להיות רק מצד ימין של הפאנל */
+            padding-right: 50px;
+        """)
+        
+        # נשתמש בגריד במקום שורות כדי לשלוט בדיוק בהצבה
+        grid_layout = QGridLayout(self)
+        grid_layout.setContentsMargins(0, 80, 50, 10)  # שוליים שמאליים רחבים יותר
+        grid_layout.setHorizontalSpacing(10)
+        grid_layout.setVerticalSpacing(10)
+        
+        # לוגו למעלה
+        tesla_pixmap = QSvgPixmap("./View/svgs/invert-Photoroom.svg")
+        scaled_pixmap = tesla_pixmap.scaled(300, 200, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         tesla_label = QLabel()
         tesla_label.setObjectName("tesla_label")
-        tesla_label.setPixmap(scaled_pixmap)  # שים את התמונה המוגדלת בלייבל
+        tesla_label.setPixmap(scaled_pixmap)
 
-        main_lay.addStretch(1)
-        main_lay.addWidget(tesla_label, alignment=Qt.AlignmentFlag.AlignHCenter)
-        main_lay.addStretch(2)
+        tesla_label.setStyleSheet("""
+        margin-top: 0px;
+        margin-left: 10px;
+    """)
+
+        # הכנסת הלוגו ומרכוז שלו
+        #grid_layout.addWidget(tesla_label, 0, 0, 1, 2, Qt.AlignmentFlag.AlignTop)
+        grid_layout.addWidget(tesla_label, 0, 0, 1, 2, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
 
+        # הכפתורים ממש בצד שמאל
         reports_button = SidePanelButton(
             "./View/svgs/reports.svg",
-            "My Stocksss",
+            "My Stocks",
             toggled=True,
         )
+        # מקם בעמודה 0 (הכי שמאלית)
+        grid_layout.addWidget(reports_button, 1, 0, Qt.AlignmentFlag.AlignLeft)
+        # הוסף מרווח ריק בעמודה 1 כדי לדחוף את הכפתור שמאלה
+        grid_layout.setColumnStretch(1, 1)
         reports_button.clicked.connect(lambda: self.navigation_requested.emit("My Stocks"))
-        main_lay.addWidget(reports_button)
-        """
-        library_button = SidePanelButton(
-            "./svgs/library.svg",
-            "Buy And Sell",
-        )
-        library_button.clicked.connect(lambda: self.navigation_requested.emit("Buy And Sell"))
-        main_lay.addWidget(library_button)
-        """
-        """
-        people_button = SidePanelButton(
-            "./svgs/people.svg",
-            "My Stocks",
-        )
-        people_button.clicked.connect(lambda: self.navigation_requested.emit("My Stocks"))
-        main_lay.addWidget(people_button)
-        """
+        
+        # כפתור שני
         activities_button = SidePanelButton(
             "./View/svgs/activities.svg",
             "Stock Info",
-            
         )
+        grid_layout.addWidget(activities_button, 2, 0, Qt.AlignmentFlag.AlignLeft)
         activities_button.clicked.connect(lambda: self.navigation_requested.emit("Stocks Info"))
-        main_lay.addWidget(activities_button)
-
-        main_lay.addSpacing(60)
-        """
-        supported = QLabel("Supported")
-        supported.setObjectName("supported")
-        main_lay.addWidget(supported)
-        """
-
-        main_lay.addSpacing(28)
-
+        
+        # הוספת מרווח אנכי
+        spacer = QWidget()
+        spacer.setFixedHeight(88)  # 60 + 28 מהקוד המקורי
+        grid_layout.addWidget(spacer, 3, 0)
+        
+        # כפתור שלישי
         get_started_button = SidePanelButton(
             "./View/svgs/get_started.svg",
             "ChatBot",
         )
+        grid_layout.addWidget(get_started_button, 4, 0, Qt.AlignmentFlag.AlignLeft)
         get_started_button.clicked.connect(lambda: self.navigation_requested.emit("ChatBot"))
-        main_lay.addWidget(get_started_button)
-        """
-        settings_button = SidePanelButton(
-            "./svgs/settings.svg",
-            "settings",
-        )
-        settings_button.clicked.connect(lambda: self.navigation_requested.emit("Settings"))
-        main_lay.addWidget(settings_button)
-        """
-
-        main_lay.addStretch()
-
-
+        
+        # הכפתורים עצמם אולי צריכים סגנון נוסף
+        for button in [reports_button, activities_button, get_started_button]:
+            button.setStyleSheet(button.styleSheet() + """
+                /* הזזה שמאלה בתוך הכפתור עצמו */
+                text-align: left;
+                padding-left: 0px;
+                margin-left: 0px;
+            """)
+        
+        # מרווח בתחתית
+        grid_layout.setRowStretch(5, 1)
+        
 if __name__ == "__main__":
     import os
-
     os.system("python main.py")

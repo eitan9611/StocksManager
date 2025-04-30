@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Ua8/9vBM15oxO9WR6r7ZfGbZqqaNr1W6pnvUgfW7rrnvdsSTPYasAuNNA61XqYkhsLnhwSXdV7UzRO8MV5gyDQ==",
+  "dgSpecHash": "g/Kt9QKd+KrIVUbK1EH2Vo8DpvHTjPRmyuPZQAzr+4itBhVGDSRGFoRrDi7rcvIhOZ2DDQK6fe73oCq7sQHPnw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\User\\Desktop\\OS\\Backend\\Backend.csproj",
+  "projectFilePath": "C:\\Users\\User\\OneDrive\\שולחן העבודה\\WS\\StocksManager\\Backend\\Backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\User\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

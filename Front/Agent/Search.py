@@ -46,7 +46,7 @@ def ask_agent(question):
 
     payload = {
         "model": "mistral",
-        "prompt": f"Using this financial knowledge:\n{context}\n\nAnswer: {question}",
+        "prompt": f"Using this financial knowledge:\n{context}\n\nAnswer the following question IN NO MORE THEN 3 LINES:\n{question}",
         "stream": False
     }
 

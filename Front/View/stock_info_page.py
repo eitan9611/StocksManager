@@ -69,18 +69,48 @@ class StockInfoPage(QFrame):
         search_layout.addWidget(self.search_button)
 
         # Buy Stock button
-        buy_stock_button = QPushButton("Buy Stock")
-        buy_stock_button.setObjectName("action_button")
-        buy_stock_button.setMinimumHeight(40)
-        buy_stock_button.clicked.connect(self.on_buy_stock)
-        search_layout.addWidget(buy_stock_button)
 
-        # Sell Stock button
-        sell_stock_button = QPushButton("Sell Stock")
-        sell_stock_button.setObjectName("action_button")
-        sell_stock_button.setMinimumHeight(40)
-        sell_stock_button.clicked.connect(self.on_sell_stock)
-        search_layout.addWidget(sell_stock_button)
+        # Buy-Sell buttons with quantity control
+
+        self.buy_quantity = 1
+        self.sell_quantity = 1
+
+        # Buy button
+        self.buy_button = QPushButton(f"Buy Stock (x{self.buy_quantity})")
+        self.buy_button.setObjectName("action_button")
+        self.buy_button.setMinimumHeight(40)
+        self.buy_button.clicked.connect(self.on_buy_stock)
+        search_layout.addWidget(self.buy_button)
+
+        # Arrows for Buy
+        self.buy_up_button = QToolButton()
+        self.buy_up_button.setArrowType(Qt.UpArrow)
+        self.buy_up_button.clicked.connect(self.increase_buy_quantity)
+        search_layout.addWidget(self.buy_up_button)
+
+        self.buy_down_button = QToolButton()
+        self.buy_down_button.setArrowType(Qt.DownArrow)
+        self.buy_down_button.clicked.connect(self.decrease_buy_quantity)
+        search_layout.addWidget(self.buy_down_button)
+
+        # Sell button
+        self.sell_button = QPushButton(f"Sell Stock (x{self.sell_quantity})")
+        self.sell_button.setObjectName("action_button")
+        self.sell_button.setMinimumHeight(40)
+        self.sell_button.clicked.connect(self.on_sell_stock)
+        search_layout.addWidget(self.sell_button)
+
+        # Arrows for Sell
+        self.sell_up_button = QToolButton()
+        self.sell_up_button.setArrowType(Qt.UpArrow)
+        self.sell_up_button.clicked.connect(self.increase_sell_quantity)
+        search_layout.addWidget(self.sell_up_button)
+
+        self.sell_down_button = QToolButton()
+        self.sell_down_button.setArrowType(Qt.DownArrow)
+        self.sell_down_button.clicked.connect(self.decrease_sell_quantity)
+        search_layout.addWidget(self.sell_down_button)
+
 
         main_layout.addLayout(search_layout)
 
@@ -285,29 +315,35 @@ class StockInfoPage(QFrame):
 
     def on_buy_stock(self):
         symbol = self.stock_input.text().strip().upper()
+        quantity = self.buy_quantity
+
         if not symbol:
             self.show_status("Please enter a stock symbol first", error=True)
             return
 
-        self.show_status(f"Processing purchase of {symbol}...", error=False)
+        self.show_status(f"Processing purchase of {quantity} shares of {symbol}...", error=False)
 
-        # TODO: Replace with actual quantity
-        success, answer = handle_buy_stock(self.email, symbol, 1)
+        success, answer = handle_buy_stock(self.email, symbol, quantity)
 
         QTimer.singleShot(1500, lambda: self.show_status(answer, error=not success))
+
+
 
     def on_sell_stock(self):
         symbol = self.stock_input.text().strip().upper()
+        quantity = self.sell_quantity
+
         if not symbol:
             self.show_status("Please enter a stock symbol first", error=True)
             return
 
-        self.show_status(f"Processing sale of {symbol}...", error=False)
+        self.show_status(f"Processing sale of {quantity} shares of {symbol}...", error=False)
 
-        # TODO: Replace with actual quantity
-        success, answer = handle_sell_stock(self.email, symbol, 1)
+        success, answer = handle_sell_stock(self.email, symbol, quantity)
 
         QTimer.singleShot(1500, lambda: self.show_status(answer, error=not success))
+
+
 
     def search_stock(self):
         symbol = self.stock_input.text().strip().upper()
@@ -684,3 +720,22 @@ class StockInfoPage(QFrame):
                 self.hover_point.setData([], [])
                 if hasattr(self, 'value_label') and self.value_label is not None:
                     self.value_label.setVisible(False)
+
+
+    def increase_buy_quantity(self):
+        self.buy_quantity += 1
+        self.buy_button.setText(f"Buy Stock (x{self.buy_quantity})")
+
+    def decrease_buy_quantity(self):
+        if self.buy_quantity > 1:
+            self.buy_quantity -= 1
+            self.buy_button.setText(f"Buy Stock (x{self.buy_quantity})")
+
+    def increase_sell_quantity(self):
+        self.sell_quantity += 1
+        self.sell_button.setText(f"Sell Stock (x{self.sell_quantity})")
+
+    def decrease_sell_quantity(self):
+        if self.sell_quantity > 1:
+            self.sell_quantity -= 1
+            self.sell_button.setText(f"Sell Stock (x{self.sell_quantity})")

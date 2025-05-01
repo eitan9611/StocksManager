@@ -37,7 +37,7 @@ SidePanelButton {
 
 SidePanelButton QLabel {
     background-color: transparent;
-    color: #1B59F8;
+    color: #1B59F8  ;  
     font-size: 16px;
     font-weight: 700;
 }
@@ -50,7 +50,7 @@ SidePanelButton QLabel#icon {
 }
 
 SidePanelButton QLabel#selected {
-    color: #1B59F8;
+    color: #1B59F8  ;
 }
 
 SidePanelButton QLabel#non_selected {
@@ -59,12 +59,12 @@ SidePanelButton QLabel#non_selected {
 
 SidePanelButton:pressed {
     background-color: rgba(27, 90, 248, 0.4);
-    color: #1B59F8;
+    color: #1B59F8  ;
 }
 
 SidePanelButton:checked {
     background-color: rgba(27, 90, 248, 0.1);
-    color: #1B59F8;
+    color: #1B59F8  ;
 }
 
 SidePanel QLabel#supported {
@@ -249,7 +249,7 @@ ActivityCard {
 }
 /*------------------------------------------------------------------------*/
 QPushButton#action_button {
-    background-color: #1B59F8;
+    background-color: #1B59F8   ; 
     color: white;
     border-radius: 8px;
     font-size: 16px;
@@ -321,7 +321,7 @@ QFrame QLabel#status_label {
 QTableWidget {
     background-color: white;
     alternate-background-color: #f5f5f5;
-    selection-background-color: #1B59F8;
+    selection-background-color: #1B59F8  ;
     selection-color: white;
     gridline-color: #ddd;
     border: 1px solid #ddd;
@@ -332,7 +332,7 @@ QTableWidget::item {
 }
 
 QTableWidget::item:selected {
-    background-color: #1B59F8;
+    background-color: #1B59F8  ;
     color: white;
 }
 
@@ -358,7 +358,7 @@ QLabel#graph_placeholder {
 
 /* Button group styling */
 QPushButton:checked {
-    background-color: #1B59F8;
+    background-color: #595959           ;
     color: white;
 }
 

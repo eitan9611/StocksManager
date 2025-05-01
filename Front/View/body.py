@@ -3,6 +3,11 @@ from cards import *
 import sys
 import os
 from main import *
+import pandas as pd
+from PyQt5.QtWidgets import QFileDialog
+import os
+from pathlib import Path
+from openpyxl import Workbook
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -26,6 +31,50 @@ class BodyContentFrame(ScrollableFrame):
     email = ""
     def __init__(self,email):
         super().__init__()
+
+
+        self.setStyleSheet("""  
+        QScrollBar:vertical {
+            background: #f0f0f0;
+            width: 12px;
+            margin: 0px 0px 0px 0px;
+            border-radius: 6px;
+        }
+        QScrollBar::handle:vertical {
+            background: #7a7a7a;
+            min-height: 20px;
+            border-radius: 6px;
+        }
+        QScrollBar::handle:vertical:hover {
+            background: #555555;
+        }
+        QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+            background: none;
+            height: 0px;
+        }
+
+        QScrollBar:horizontal {
+            background: #f0f0f0;
+            height: 12px;
+            margin: 0px 0px 0px 0px;
+            border-radius: 6px;
+        }
+        QScrollBar::handle:horizontal {
+            background: #7a7a7a;
+            min-width: 20px;
+            border-radius: 6px;
+        }
+        QScrollBar::handle:horizontal:hover {
+            background: #555555;
+        }
+        QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+            background: none;
+            width: 0px;
+        }
+    """)
+
+
+
         self.email = email
 
         # Initialize API client
@@ -52,6 +101,8 @@ class BodyContentFrame(ScrollableFrame):
         # Fetch dashboard stats from API
         # TODO: Replace with actual API call
         self.dashboard_stats = self.api_client.get_dashboard_stats()
+
+
 
 
         stock_symbols = ["AAPL", "TSLA", "MSFT" , "AMZN", "NFLX", "AMD"]
@@ -125,7 +176,8 @@ class BodyContentFrame(ScrollableFrame):
 
         # Add the table frame to the content layout where ActivityCard was
         content_lay.addWidget(table_frame, 0, 1)
-
+        content_lay.setColumnStretch(1, 2)
+        
         # Add profit/loss graph section with header
         graph_section = QLabel("Annual Performance Analysis")
         graph_section.setObjectName("section_header")
@@ -136,6 +188,11 @@ class BodyContentFrame(ScrollableFrame):
         main_lay.addWidget(self.profit_loss_graph)
 
         main_lay.addStretch()
+
+
+
+    
+
 
     def create_user_profile(self):
         """Create a user profile section displaying the email"""
@@ -245,8 +302,113 @@ class BodyContentFrame(ScrollableFrame):
     def create_purchase_table(self):
         # Create table for purchase history
         table = QTableWidget()
+        table.setEditTriggers(QTableWidget.NoEditTriggers)
+
+    #     table.setStyleSheet("""
+    #     QTableWidget {
+    #         background-color: #ffffff;
+    #         alternate-background-color: #f9f9f9;
+    #         gridline-color: #e0e0e0;
+    #     }
+    #     QHeaderView::section {
+    #         background-color: #f0f0f0;
+    #         color: #333;
+    #         padding: 5px;
+    #         border: none;
+    #         font-weight: bold;
+    #     }
+    #     QTableWidget::item {
+    #         padding: 5px;
+    #     }
+    #     QScrollBar:vertical {
+    #         background: #f0f0f0;
+    #         width: 10px;
+    #         margin: 0px;
+    #         border-radius: 5px;
+    #     }
+    #     QScrollBar::handle:vertical {
+    #         background: #888;
+    #         min-height: 20px;
+    #         border-radius: 5px;
+    #     }
+    #     QScrollBar::handle:vertical:hover {
+    #         background: #555;
+    #     }
+    #     QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    #         height: 0px;
+    #         background: none;
+    #     }
+    # """)
+
+
+        table.setStyleSheet("""
+        QTableWidget {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #333;
+            gridline-color: #f0f0f0;
+            alternate-background-color: #fafafa;
+            selection-background-color: #e6f0ff;
+            selection-color: #000;
+        }
+
+        QHeaderView::section {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            padding: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        QTableWidget::item {
+            padding: 6px;
+        }
+
+        QTableWidget::item:selected {
+            background-color: #dbeafe;
+            color: #000;
+        }
+
+        QScrollBar:vertical {
+            background: #f0f0f0;
+            width: 12px;
+            border-radius: 6px;
+        }
+
+        QScrollBar::handle:vertical {
+            background: #bbb;
+            border-radius: 6px;
+        }
+
+        QScrollBar::handle:vertical:hover {
+            background: #999;
+        }
+
+        QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+            height: 0px;
+            background: none;
+        }
+    """)
+
+
+
         table.setColumnCount(5)
+
+        
+
         table.setHorizontalHeaderLabels(["Date", "Stock", "Quantity", "Price", "Total"])
+
+
+        # קבע מוד קבוע לרוחב העמודות (לא אוטומטי)
+        table.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
+
+        # קבע רוחב קבוע לכל עמודה
+        fixed_width = 1200
+        for col in range(table.columnCount()):
+            table.setColumnWidth(col, fixed_width)
 
         sample_data = format_trades_for_view(self.email)
 
@@ -277,6 +439,20 @@ class BodyContentFrame(ScrollableFrame):
 
                 table.setItem(row, 3, price_item)
                 table.setItem(row, 4, total_item)
+
+
+            # קביעת רוחב ספציפי לכל עמודה (ברוחב פיקסלים)
+            table.setColumnWidth(0, 1200)  # עמודה ראשונה - תאריך
+            table.setColumnWidth(1, 100)  # עמודה שניה - מניה
+            table.setColumnWidth(2, 80)   # עמודה שלישית - כמות
+            table.setColumnWidth(3, 100)  # עמודה רביעית - מחיר
+            table.setColumnWidth(4, 120)  # עמודה חמישית - סה"כ
+
+            # הגדרת גובה אחיד לכל השורות
+            row_height = 38  # שנה את הערך הזה לגובה הרצוי
+            for row in range(table.rowCount()):
+                table.setRowHeight(row, row_height)
+
 
             # Set table properties
             table.setAlternatingRowColors(True)
@@ -623,10 +799,14 @@ class BodyContentFrame(ScrollableFrame):
         # Update cards with new data
 
 
+    
+
+
+
 class Body(QFrame):
     def __init__(self,email):
         super().__init__()
-
+        
         main_lay = QVBoxLayout(self)
 
         top_lay = QHBoxLayout()
@@ -638,15 +818,24 @@ class Body(QFrame):
 
         top_lay.addStretch()
 
-        # Replace SVG with text icon
-        download_icon = QLabel("↓")  # Unicode download arrow
-        download_icon.setStyleSheet("font-size: 20px; color: #4c4c4c;")
-        download_icon.setObjectName("download_icon")
-        top_lay.addWidget(download_icon)
+        download_button = QPushButton("Download")
+        download_button.setIcon(QIcon("./View/svgs/download.svg"))  # תוודא שהנתיב נכון
+        download_button.setStyleSheet("""
+            QPushButton {
+                background-color: transparent;
+                font-size: 14px;
+                color: #4c4c4c;
+            }
+            QPushButton:hover {
+                color: #1B59F8; 
+            }
+        """)
+        
+        top_lay.addWidget(download_button)
 
-        download = QLabel("Download")
-        download.setObjectName("download")
-        top_lay.addWidget(download)
+        # חיבור לפונקציה שתיצור את קובץ האקסל
+        download_button.clicked.connect(lambda: self.export_table_to_excel(body_content_frame.purchase_table))
+
 
         main_lay.addSpacing(37)
 
@@ -660,6 +849,28 @@ class Body(QFrame):
 
         main_lay.addStretch()
 
+
+
+    def export_table_to_excel(self, table):
+        downloads_folder = str(Path.home() / "Downloads")
+        file_path = os.path.join(downloads_folder, "exported_table.xlsx")
+
+        wb = Workbook()
+        ws = wb.active
+
+        # כתיבת כותרות
+        for col in range(table.columnCount()):
+            header = table.horizontalHeaderItem(col)
+            ws.cell(row=1, column=col+1, value=header.text() if header else "")
+
+        # כתיבת שורות
+        for row in range(table.rowCount()):
+            for col in range(table.columnCount()):
+                item = table.item(row, col)
+                ws.cell(row=row+2, column=col+1, value=item.text() if item else "")
+
+        wb.save(file_path)
+        print(f"download succes {file_path}")
 
 if __name__ == "__main__":
     import os

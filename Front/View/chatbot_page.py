@@ -9,6 +9,42 @@ import requests
 
 
 class MessageBubble(QFrame):
+    # def __init__(self, message, is_user=True):
+    #     super().__init__()
+
+    #     self.is_user = is_user
+
+    #     # Set styling based on whether this is a user or bot message
+    #     if is_user:
+    #         self.setObjectName("user_bubble")
+    #     else:
+    #         self.setObjectName("bot_bubble")
+
+    #     # Create layout
+    #     layout = QVBoxLayout(self)
+
+    #     # Add message text
+    #     self.message_label = QLabel(message)
+    #     self.message_label.setWordWrap(True)
+    #     self.message_label.setObjectName("message_text")
+    #     layout.addWidget(self.message_label)
+
+    #     # Add timestamp
+    #     current_time = QTime.currentTime().toString("hh:mm")
+    #     time_label = QLabel(current_time)
+    #     time_label.setObjectName("time_label")
+
+    #     # Align timestamp to right for user messages, left for bot messages
+    #     time_layout = QHBoxLayout()
+    #     if is_user:
+    #         time_layout.addStretch()
+    #         time_layout.addWidget(time_label)
+    #     else:
+    #         time_layout.addWidget(time_label)
+    #         time_layout.addStretch()
+
+    #     layout.addLayout(time_layout)
+
     def __init__(self, message, is_user=True):
         super().__init__()
 
@@ -20,21 +56,34 @@ class MessageBubble(QFrame):
         else:
             self.setObjectName("bot_bubble")
 
-        # Create layout
-        layout = QVBoxLayout(self)
+        # Main layout for the bubble
+        main_layout = QHBoxLayout(self)
+        main_layout.setAlignment(Qt.AlignLeft if not is_user else Qt.AlignRight)
 
-        # Add message text
+        # Icon
+        icon_label = QLabel()
+        if is_user:
+            icon_label.setPixmap(QPixmap("View/svgs/user_icon.svg").scaled(40, 40, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        else:
+            icon_label.setPixmap(QPixmap("View/svgs/robot_icon.svg").scaled(40, 40, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+
+        # Message and time layout
+        content_layout = QVBoxLayout()
+        
+        # Message and time layout
+        content_layout = QVBoxLayout()
+
+        # Message text
         self.message_label = QLabel(message)
         self.message_label.setWordWrap(True)
         self.message_label.setObjectName("message_text")
-        layout.addWidget(self.message_label)
+        content_layout.addWidget(self.message_label)
 
-        # Add timestamp
+        # Timestamp
         current_time = QTime.currentTime().toString("hh:mm")
         time_label = QLabel(current_time)
         time_label.setObjectName("time_label")
 
-        # Align timestamp to right for user messages, left for bot messages
         time_layout = QHBoxLayout()
         if is_user:
             time_layout.addStretch()
@@ -43,7 +92,20 @@ class MessageBubble(QFrame):
             time_layout.addWidget(time_label)
             time_layout.addStretch()
 
-        layout.addLayout(time_layout)
+        content_layout.addLayout(time_layout)
+
+        # עכשיו עוטפים את ה-layout בתוך QWidget
+        content_widget = QWidget()
+        content_widget.setLayout(content_layout)
+
+        # ואז מוסיפים את ה-widget למיין לייאאוט
+        if is_user:
+            main_layout.addWidget(content_widget)
+            main_layout.addWidget(icon_label)
+        else:
+            main_layout.addWidget(icon_label)
+            main_layout.addWidget(content_widget)
+
 
 
 class ChatBotPage(QFrame):
@@ -101,7 +163,7 @@ class ChatBotPage(QFrame):
 
         # Send button
         self.send_button = QPushButton()
-        self.send_button.setIcon(QIcon("View/svgs/arrow_full_up.svg"))
+        self.send_button.setIcon(QIcon("View/svgs/arrow_full_up1.svg"))
         self.send_button.setIconSize(QSize(24, 24))
         self.send_button.clicked.connect(self.send_message)
         input_layout.addWidget(self.send_button)

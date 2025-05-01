@@ -1,5 +1,4 @@
 from View.commons import *
-from Model.ExampleModel import ApiClient
 from PySide6.QtWidgets import QCompleter
 from Present.TradePresent import *
 from Present.StockPresent import *
@@ -17,8 +16,7 @@ class StockInfoPage(QFrame):
         self.email = email
 
         # Initialize API client
-        self.api_client = ApiClient()
-        
+
         # Create main layout
         main_layout = QVBoxLayout(self)
 

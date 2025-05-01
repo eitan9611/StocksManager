@@ -4,7 +4,6 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from Model.ExampleModel import ApiClient
 import requests
 
 
@@ -111,9 +110,6 @@ class MessageBubble(QFrame):
 class ChatBotPage(QFrame):
     def __init__(self):
         super().__init__()
-
-        # Initialize API client
-        self.api_client = ApiClient()
 
         # Create main layout
         main_layout = QVBoxLayout(self)

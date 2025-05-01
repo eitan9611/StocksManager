@@ -16,7 +16,6 @@ from datetime import *
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from Model.ExampleModel import ApiClient
 from Present.TradePresent import *
 from Present.UserPresent import *
 from Present.StockPresent import *
@@ -77,9 +76,6 @@ class BodyContentFrame(ScrollableFrame):
 
         self.email = email
 
-        # Initialize API client
-        self.api_client = ApiClient()
-
         main_lay = self.frameLayout()
         main_lay.setSpacing(21)
 
@@ -97,13 +93,6 @@ class BodyContentFrame(ScrollableFrame):
         small_cards_lay = QVBoxLayout()
         small_cards_lay.setSpacing(17)
         content_lay.addLayout(small_cards_lay, 0, 0)
-
-        # Fetch dashboard stats from API
-        # TODO: Replace with actual API call
-        self.dashboard_stats = self.api_client.get_dashboard_stats()
-
-
-
 
         stock_symbols = ["AAPL", "TSLA", "MSFT" , "AMZN", "NFLX", "AMD"]
 
@@ -303,42 +292,6 @@ class BodyContentFrame(ScrollableFrame):
         # Create table for purchase history
         table = QTableWidget()
         table.setEditTriggers(QTableWidget.NoEditTriggers)
-
-    #     table.setStyleSheet("""
-    #     QTableWidget {
-    #         background-color: #ffffff;
-    #         alternate-background-color: #f9f9f9;
-    #         gridline-color: #e0e0e0;
-    #     }
-    #     QHeaderView::section {
-    #         background-color: #f0f0f0;
-    #         color: #333;
-    #         padding: 5px;
-    #         border: none;
-    #         font-weight: bold;
-    #     }
-    #     QTableWidget::item {
-    #         padding: 5px;
-    #     }
-    #     QScrollBar:vertical {
-    #         background: #f0f0f0;
-    #         width: 10px;
-    #         margin: 0px;
-    #         border-radius: 5px;
-    #     }
-    #     QScrollBar::handle:vertical {
-    #         background: #888;
-    #         min-height: 20px;
-    #         border-radius: 5px;
-    #     }
-    #     QScrollBar::handle:vertical:hover {
-    #         background: #555;
-    #     }
-    #     QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
-    #         height: 0px;
-    #         background: none;
-    #     }
-    # """)
 
 
         table.setStyleSheet("""
@@ -791,17 +744,6 @@ class BodyContentFrame(ScrollableFrame):
         
         # Update the canvas
         self.canvas.draw()
-
-    def refresh_data(self):
-        """Refresh dashboard data from the API"""
-        # TODO: Implement refresh functionality to update cards with new data
-        self.dashboard_stats = self.api_client.get_dashboard_stats()
-        # Update cards with new data
-
-
-    
-
-
 
 class Body(QFrame):
     def __init__(self,email):

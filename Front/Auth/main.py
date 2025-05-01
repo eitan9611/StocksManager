@@ -296,12 +296,12 @@ class LoginWindow(QWidget):
             print(f"Starting subprocess with: {sys.executable} {main_path} {user_email}")
             subprocess.Popen([sys.executable, main_path, user_email])
             
-            print("Scheduling window close...")
+            """print("Scheduling window close...")
             # Schedule window close after a short delay to ensure subprocess starts
             QTimer.singleShot(500, lambda: self.close())
             
             # Make sure we exit if window doesn't close properly
-            QTimer.singleShot(1000, lambda: QApplication.quit())
+            QTimer.singleShot(1000, lambda: QApplication.quit())"""
             
         except Exception as e:
             print(f"Error opening main window: {e}")

@@ -46,8 +46,8 @@ def ask_agent(question):
 
     payload = {
         "model": "mistral",
-        "prompt": f"Using this financial knowledge:\n{context}\n\nAnswer the following question IN NO MORE THEN 3 LINES:\n{question}",
-        "stream": False
+        "prompt": f" Answer the following question in less than 100 words, using this financial knowledge:\n{context}\n\n{question} ANWSER IN NO MORE THEN 100 WORDS \n",   
+                    "stream": False
     }
 
     # When running in Docker, use the service name instead of localhost

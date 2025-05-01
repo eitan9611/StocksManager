@@ -19,20 +19,21 @@ class SidePanel(Card):
         grid_layout.setVerticalSpacing(10)
         
         # לוגו למעלה
-        tesla_pixmap = QSvgPixmap("./View/svgs/invert-Photoroom.svg")
-        scaled_pixmap = tesla_pixmap.scaled(300, 200, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
-        tesla_label = QLabel()
-        tesla_label.setObjectName("tesla_label")
-        tesla_label.setPixmap(scaled_pixmap)
+        logo_pixmap = QSvgPixmap("./View/svgs/invert-Photoroom.svg")
+        scaled_pixmap = logo_pixmap.scaled(300, 200, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        logo_label = QLabel()
+        logo_label.setObjectName("logo_label")
+        logo_label.setPixmap(scaled_pixmap)
 
-        tesla_label.setStyleSheet("""
-        margin-top: 0px;
-        margin-left: 10px;
+        logo_label.setStyleSheet("""
+        margin-top: -75px;
+        margin-left: -30px;
     """)
+        logo_label.setFixedSize(scaled_pixmap.size())
 
         # הכנסת הלוגו ומרכוז שלו
         #grid_layout.addWidget(tesla_label, 0, 0, 1, 2, Qt.AlignmentFlag.AlignTop)
-        grid_layout.addWidget(tesla_label, 0, 0, 1, 2, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+        grid_layout.addWidget(logo_label, 0, 0, 1, 2, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
 
         # הכפתורים ממש בצד שמאל

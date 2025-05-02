@@ -26,7 +26,7 @@ class SidePanel(Card):
         logo_label.setPixmap(scaled_pixmap)
 
         logo_label.setStyleSheet("""
-        margin-top: -75px;
+        margin-top: -130px;
         margin-left: -30px;
     """)
         logo_label.setFixedSize(scaled_pixmap.size())

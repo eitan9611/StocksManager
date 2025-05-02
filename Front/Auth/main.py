@@ -306,7 +306,7 @@ class LoginWindow(QWidget):
         except Exception as e:
             print(f"Error opening main window: {e}")
 
-    def open_google_login(self):
+    def open_google_login(self): 
         try:
             print("Starting OAuth login process...")
             self.server = HTTPServer(("localhost", 5025), OAuthHandler)

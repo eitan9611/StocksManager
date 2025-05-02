@@ -6,10 +6,12 @@ import pandas as pd
 from PySide6.QtWidgets import QCompleter
 import pyqtgraph as pg
 import numpy as np
-from PySide6.QtCore import Qt, QPointF
+from PySide6.QtCore import Qt, QPointF, Signal
+
 
 
 class StockInfoPage(QFrame):
+    stock_bought = Signal()  # No parameters for now
     email = ""
     def __init__(self, email):
         super().__init__()
@@ -322,6 +324,8 @@ class StockInfoPage(QFrame):
         self.show_status(f"Processing purchase of {quantity} shares of {symbol}...", error=False)
 
         success, answer = handle_buy_stock(self.email, symbol, quantity)
+        if success:
+            self.stock_bought.emit()
 
         QTimer.singleShot(1500, lambda: self.show_status(answer, error=not success))
 
@@ -339,6 +343,8 @@ class StockInfoPage(QFrame):
 
         success, answer = handle_sell_stock(self.email, symbol, quantity)
 
+        if success:
+            self.stock_bought.emit()
         QTimer.singleShot(1500, lambda: self.show_status(answer, error=not success))
 
 

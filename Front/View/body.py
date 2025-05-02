@@ -151,6 +151,8 @@ class BodyContentFrame(ScrollableFrame):
         # Create purchase history table and place it in the right side where ActivityCard was
         self.purchase_table = self.create_purchase_table()
 
+        self.refresh_purchase_table()
+
         # Create a frame to hold the table with a title
         table_frame = QFrame()
         table_layout = QVBoxLayout(table_frame)
@@ -293,7 +295,6 @@ class BodyContentFrame(ScrollableFrame):
         table = QTableWidget()
         table.setEditTriggers(QTableWidget.NoEditTriggers)
 
-
         table.setStyleSheet("""
         QTableWidget {
             background-color: #ffffff;
@@ -346,14 +347,9 @@ class BodyContentFrame(ScrollableFrame):
         }
     """)
 
-
-
         table.setColumnCount(5)
 
-        
-
         table.setHorizontalHeaderLabels(["Date", "Stock", "Quantity", "Price", "Total"])
-
 
         # קבע מוד קבוע לרוחב העמודות (לא אוטומטי)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
@@ -366,7 +362,7 @@ class BodyContentFrame(ScrollableFrame):
         sample_data = format_trades_for_view(self.email)
 
         if sample_data and sample_data[0][0] == "Error":
-            #TODO - replace with message on screen
+            # TODO - replace with message on screen
             print(f"{sample_data[0][1]:}")
 
         else:
@@ -376,7 +372,6 @@ class BodyContentFrame(ScrollableFrame):
                 table.setItem(row, 0, QTableWidgetItem(date))
                 table.setItem(row, 1, QTableWidgetItem(stock))
                 table.setItem(row, 2, QTableWidgetItem(quantity))
-
 
                 # Highlight current value based on profit/loss
                 price_item = QTableWidgetItem(price)
@@ -393,11 +388,10 @@ class BodyContentFrame(ScrollableFrame):
                 table.setItem(row, 3, price_item)
                 table.setItem(row, 4, total_item)
 
-
             # קביעת רוחב ספציפי לכל עמודה (ברוחב פיקסלים)
             table.setColumnWidth(0, 1200)  # עמודה ראשונה - תאריך
             table.setColumnWidth(1, 100)  # עמודה שניה - מניה
-            table.setColumnWidth(2, 80)   # עמודה שלישית - כמות
+            table.setColumnWidth(2, 80)  # עמודה שלישית - כמות
             table.setColumnWidth(3, 100)  # עמודה רביעית - מחיר
             table.setColumnWidth(4, 120)  # עמודה חמישית - סה"כ
 
@@ -405,7 +399,6 @@ class BodyContentFrame(ScrollableFrame):
             row_height = 38  # שנה את הערך הזה לגובה הרצוי
             for row in range(table.rowCount()):
                 table.setRowHeight(row, row_height)
-
 
             # Set table properties
             table.setAlternatingRowColors(True)
@@ -417,6 +410,46 @@ class BodyContentFrame(ScrollableFrame):
             table.setMinimumHeight(300)
 
         return table
+
+    def get_updated_purchase_data(self):
+        sample_data = format_trades_for_view(self.email)
+
+        if sample_data and sample_data[0][0] == "Error":
+            print(f"{sample_data[0][1]}")
+            return []
+
+        return sample_data
+
+    def refresh_purchase_table(self):
+        self.purchase_table.clearContents()
+        self.purchase_table.setRowCount(0)
+
+        updated_data = self.get_updated_purchase_data()
+        self.purchase_table.setRowCount(len(updated_data))
+
+        for row, (type_, date, stock, quantity, price, total) in enumerate(updated_data):
+            self.purchase_table.setItem(row, 0, QTableWidgetItem(date))
+            self.purchase_table.setItem(row, 1, QTableWidgetItem(stock))
+            self.purchase_table.setItem(row, 2, QTableWidgetItem(quantity))
+
+            price_item = QTableWidgetItem(price)
+            total_item = QTableWidgetItem(total)
+
+            # Color profit/loss
+            if type_ == 1:
+                price_item.setForeground(QColor("green"))
+                total_item.setForeground(QColor("green"))
+            else:
+                price_item.setForeground(QColor("red"))
+                total_item.setForeground(QColor("red"))
+
+            self.purchase_table.setItem(row, 3, price_item)
+            self.purchase_table.setItem(row, 4, total_item)
+
+        # Set row height
+        row_height = 38
+        for row in range(self.purchase_table.rowCount()):
+            self.purchase_table.setRowHeight(row, row_height)
 
     def create_profit_loss_graph(self):
         # Create a frame to hold the graph
@@ -786,12 +819,15 @@ class Body(QFrame):
 
         main_lay.addSpacing(28)
 
-        body_content_frame = BodyContentFrame(email)
-        main_lay.addWidget(body_content_frame, 1)
+        self.body_content_frame = BodyContentFrame(email)
+        main_lay.addWidget(self.body_content_frame, 1)
 
         main_lay.addStretch()
 
+    def refresh_table(self):
+        print("Refreshing Body table")
 
+        self.body_content_frame.refresh_purchase_table()
 
     def export_table_to_excel(self, table):
         downloads_folder = str(Path.home() / "Downloads")
